@@ -2,12 +2,13 @@
 tags: [Firefox]
 title: Firefox UI Modification
 created: '2020-01-09T08:49:04.060Z'
-modified: '2020-01-09T08:56:11.872Z'
+modified: '2020-01-09T09:28:07.013Z'
 ---
 
 # Firefox UI Modification
 
 Unlock custom CSS usage in Firefox 69 and newer
+
 `about:config` > `toolkit.legacyUserProfileCustomizations.stylesheets` > `true`
 
 Profile folders location on drive:
@@ -34,7 +35,6 @@ From https://github.com/Aris-t2/CustomCSSforFx
 ```CSS
 
 /* Move the tabbar and address bar below the page content */
-/* https://github.com/jonhoo/configs/blob/master/gui/.mozilla/firefox/dev-edition-default/chrome/userChrome.css */
 @import "tabs_below_content.css"; /**/
 
 /* Hide app button on macOS*/
@@ -43,6 +43,8 @@ From https://github.com/Aris-t2/CustomCSSforFx
 
 `tabs_below_content.css`
 ```CSS
+
+/* Code from https://github.com/jonhoo/configs/blob/master/gui/.mozilla/firefox/dev-edition-default/chrome/userChrome.css */
 
 @-moz-document url(chrome://browser/content/browser.xhtml) {
 	/* tabs on bottom of window */
