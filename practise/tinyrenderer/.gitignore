@@ -15,6 +15,9 @@ Cargo.lock
 **/*.rs.bk
 
 .DS_Store
-*.tga
+output.tga
+.vscode/
+.idea/
+assets/
 
 # End of https://www.gitignore.io/api/rust

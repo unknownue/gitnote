@@ -1,4 +1,5 @@
 docs/* linguist-documentation=false
+practise/* linguist-documentation=false
 
 *.md linguist-detectable=true
 *.md linguist-language=Markdown

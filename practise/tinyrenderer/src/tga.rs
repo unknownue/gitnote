@@ -47,20 +47,20 @@ impl TgaHeader {
         Ok(header)
     }
 
-    fn write_header(&self, wirter: &mut impl Write) -> std::io::Result<()> {
+    fn write_header(&self, writer: &mut impl Write) -> std::io::Result<()> {
 
-        wirter.write_u8(self.id_length)?;
-        wirter.write_u8(self.colormaptype)?;
-        wirter.write_u8(self.datatypecode)?;
-        wirter.write_i16::<LittleEndian>(self.colormap_origin)?;
-        wirter.write_i16::<LittleEndian>(self.colormap_length)?;
-        wirter.write_u8(self.colormap_depth)?;
-        wirter.write_i16::<LittleEndian>(self.x_origin)?;
-        wirter.write_i16::<LittleEndian>(self.y_origin)?;
-        wirter.write_i16::<LittleEndian>(self.width)?;
-        wirter.write_i16::<LittleEndian>(self.height)?;
-        wirter.write_u8(self.bits_per_pixel)?;
-        wirter.write_u8(self.image_descriptor)?;
+        writer.write_u8(self.id_length)?;
+        writer.write_u8(self.colormaptype)?;
+        writer.write_u8(self.datatypecode)?;
+        writer.write_i16::<LittleEndian>(self.colormap_origin)?;
+        writer.write_i16::<LittleEndian>(self.colormap_length)?;
+        writer.write_u8(self.colormap_depth)?;
+        writer.write_i16::<LittleEndian>(self.x_origin)?;
+        writer.write_i16::<LittleEndian>(self.y_origin)?;
+        writer.write_i16::<LittleEndian>(self.width)?;
+        writer.write_i16::<LittleEndian>(self.height)?;
+        writer.write_u8(self.bits_per_pixel)?;
+        writer.write_u8(self.image_descriptor)?;
 
         Ok(())
     }
@@ -70,7 +70,7 @@ impl TgaHeader {
 #[derive(Debug, Clone)]
 pub struct TgaColor {
     bgra: [u8; 4],
-    bytes_per_pixel: u8,
+    format: TgaFormat,
 }
 
 impl TgaColor {
@@ -78,22 +78,29 @@ impl TgaColor {
     pub fn zeros() -> TgaColor {
         TgaColor {
             bgra: [0; 4],
-            bytes_per_pixel: 1,
+            format: TgaFormat::RGBA,
+        }
+    }
+
+    pub const fn from_rgb(r: u8, g: u8, b: u8) -> TgaColor {
+        TgaColor {
+            bgra: [r, g, b, 0],
+            format: TgaFormat::RGB,
         }
     }
 
     pub const fn from_rgba(r: u8, g: u8, b: u8, a: u8) -> TgaColor {
         TgaColor {
             bgra: [r, g, b, a],
-            bytes_per_pixel: 4,
+            format: TgaFormat::RGBA,
         }
     }
 
     #[allow(unused)]
-    pub fn from_first(v: u8) -> TgaColor {
+    pub fn from_greyscale(v: u8) -> TgaColor {
         TgaColor {
             bgra: [v, 0, 0, 0],
-            bytes_per_pixel: 1,
+            format: TgaFormat::Grayscale,
         }
     }
 }
@@ -127,7 +134,7 @@ impl Mul<f32> for TgaColor {
                 (self.bgra[2] as f32 * rhs) as u8,
                 (self.bgra[3] as f32 * rhs) as u8,
             ],
-            bytes_per_pixel: self.bytes_per_pixel,
+            format: self.format,
         }
     }
 }
@@ -166,13 +173,13 @@ impl TgaImage {
 
         let mut file = File::open(path)?;
         let header = TgaHeader::read_header(&mut file)
-            .expect("An error occured while reading header!");
+            .expect("An error occurred while reading header!");
 
         let width  = header.width  as usize;
         let height = header.height as usize;
         let bytes_per_pixel = header.bits_per_pixel >> 3;
 
-        if width <= 0 || height <= 0 ||
+        if width == 0 || height == 0 ||
             (bytes_per_pixel != TgaFormat::Grayscale as u8 && bytes_per_pixel != TgaFormat::RGB as u8 && bytes_per_pixel != TgaFormat::RGBA as u8) {
             return Err(std::io::Error::new(std::io::ErrorKind::Other, "An error occured while reading the data!"))
         }
@@ -196,7 +203,7 @@ impl TgaImage {
             tga_image.flip_vertically();
         }
         if header.image_descriptor & 0x10 != 0 {
-            tga_image.flip_horizontally();
+            tga_image.flip_horizontally()?;
         }
 
         Ok(tga_image)
@@ -225,8 +232,8 @@ impl TgaImage {
             for j in 0..self.height {
                 let c1 = self.get(i, j)?;
                 let c2 = self.get(self.width - 1 - i, j)?;
-                self.set(i, j, &c2)?;
-                self.set(self.width - 1 - i, j, &c1)?;
+                self.set(i, j, &c2);
+                self.set(self.width - 1 - i, j, &c1);
             }
         }
 
@@ -262,6 +269,15 @@ impl TgaImage {
         if rle {
             self.unload_rle_data(&mut file)?
         } else {
+//            for i in 0..100 {
+//                for j in 0..100 {
+//                    let r = self.data[(i * 100 + j) * 3 + 0];
+//                    let g = self.data[(i * 100 + j) * 3 + 1];
+//                    let b = self.data[(i * 100 + j) * 3 + 2];
+//                    print!("({}, {}, {}) ", r, g, b);
+//                }
+//                println!();
+//            }
             file.write(&self.data)
                 .expect("Can't unload raw data!");
         }
@@ -331,11 +347,11 @@ impl TgaImage {
     fn unload_rle_data(&self, file: &mut impl Write) -> std::io::Result<()> {
 
         const MAX_CHUNK_LENGTH: usize = 128;
-        let pixel_count = self.width * self.width;
+        let pixel_count = self.width * self.height;
         let mut current_pixel = 0;
 
         while current_pixel < pixel_count {
-            let chunk_start  = current_pixel * self.bytes_per_pixel;
+            let chunk_start = current_pixel * self.bytes_per_pixel;
             let mut current_byte = current_pixel * self.bytes_per_pixel;
             let mut run_length = 1;
             let mut raw = true;
@@ -370,15 +386,12 @@ impl TgaImage {
         Ok(())
     }
 
-    pub fn set(&mut self, x: usize, y: usize, color: &TgaColor) -> std::io::Result<()> {
-        if x >= self.width || y >= self.height {
-            Err(std::io::Error::new(std::io::ErrorKind::Other, "Color location is out of bound!"))
-        } else {
-            let location = x + y * self.width * self.bytes_per_pixel;
+    pub fn set(&mut self, x: usize, y: usize, color: &TgaColor) {
+        if x < self.width && y < self.height {
+            let location = (x + y * self.width) * self.bytes_per_pixel;
             for i in 0..self.bytes_per_pixel {
                 self.data[location + i] = color[i];
             }
-            Ok(())
         }
     }
 
@@ -387,7 +400,7 @@ impl TgaImage {
             Err(std::io::Error::new(std::io::ErrorKind::Other, "Color location is out of bound!"))
         } else {
             let mut color = TgaColor::from_rgba(0, 0, 0, 0);
-            let location = x + y * self.width * self.bytes_per_pixel;
+            let location = (x + y * self.width) * self.bytes_per_pixel;
             for i in 0..self.bytes_per_pixel {
                 color[i] = self.data[location + i];
             }
