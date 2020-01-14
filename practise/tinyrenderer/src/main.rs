@@ -1,6 +1,8 @@
 
 use tinyrenderer::tga::TgaImage;
 use tinyrenderer::tga::{TgaFormat, TgaColor};
+use tinyrenderer::Vec2i;
+use tinyrenderer::bresenham::line_segment_v3 as draw_line;
 
 const OUTPUT_PATH: &'static str = "output.tga";
 const RED  : TgaColor = TgaColor::from_rgb(0,0,255);
@@ -11,12 +13,27 @@ fn main() -> std::io::Result<()> {
 
     // test_tga()
     // test_draw_line()
-    test_draw_face()
+    // test_draw_face()
+    test_rasterization()
 }
 
+fn test_rasterization() -> std::io::Result<()> {
+
+    use tinyrenderer::rasterization::barycentric;
+
+    let mut image = TgaImage::new(200, 200, TgaFormat::RGB);
+
+    let pts = [Vec2i::new(10, 10), Vec2i::new(100, 30), Vec2i::new(190, 160)];
+
+    barycentric(&mut image, pts, &RED);
+
+    image.flip_vertically();
+    image.write_tga_file(OUTPUT_PATH, true)
+}
+
+#[allow(unused)]
 fn test_draw_face() -> std::io::Result<()> {
 
-    use tinyrenderer::bresenham::line_segment_v3;
     use tinyrenderer::mesh::ObjMesh;
 
     let mut image = TgaImage::new(800, 800, TgaFormat::RGB);
@@ -27,12 +44,12 @@ fn test_draw_face() -> std::io::Result<()> {
             let v0 = &mesh.vertices[face[j]];
             let v1 = &mesh.vertices[face[(j + 1) % 3]];
 
-            let x0 = ((v0.position[0] + 1.0) * 400.0) as usize;
-            let y0 = ((v0.position[1] + 1.0) * 400.0) as usize;
-            let x1 = ((v1.position[0] + 1.0) * 400.0) as usize;
-            let y1 = ((v1.position[1] + 1.0) * 400.0) as usize;
+            let x0 = ((v0.position[0] + 1.0) * 400.0) as i32;
+            let y0 = ((v0.position[1] + 1.0) * 400.0) as i32;
+            let x1 = ((v1.position[0] + 1.0) * 400.0) as i32;
+            let y1 = ((v1.position[1] + 1.0) * 400.0) as i32;
 
-            line_segment_v3(&mut image, x0, y0, x1, y1, WHITE)?;
+            draw_line(&mut image, x0, y0, x1, y1, &WHITE)
         }
     }
 
@@ -43,12 +60,10 @@ fn test_draw_face() -> std::io::Result<()> {
 #[allow(unused)]
 fn test_draw_line() -> std::io::Result<()> {
 
-    use tinyrenderer::bresenham::line_segment_v3;
-
     let mut image = TgaImage::new(100, 100, TgaFormat::RGB);
-    line_segment_v3(&mut image, 13, 20, 80, 40, WHITE)?;
-    line_segment_v3(&mut image, 20, 13, 40, 80, RED)?;
-    line_segment_v3(&mut image, 80, 40, 13, 20, RED)?;
+    draw_line(&mut image, 13, 20, 80, 40, &WHITE);
+    draw_line(&mut image, 20, 13, 40, 80, &RED);
+    draw_line(&mut image, 80, 40, 13, 20, &RED);
     image.flip_vertically();
     image.write_tga_file(OUTPUT_PATH, true)
 }

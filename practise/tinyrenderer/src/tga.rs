@@ -151,17 +151,17 @@ pub enum TgaFormat {
 #[derive(Debug, Clone)]
 pub struct TgaImage {
     data: Vec<u8>,
-    width : usize,
-    height: usize,
+    pub width : i32,
+    pub height: i32,
     bytes_per_pixel: usize,
 }
 
 impl TgaImage {
 
-    pub fn new(width: usize, height: usize, format: TgaFormat) -> TgaImage {
+    pub fn new(width: i32, height: i32, format: TgaFormat) -> TgaImage {
         
         let bytes_per_pixel = format as usize;
-        let nbytes = width * height * bytes_per_pixel;
+        let nbytes = (width * height) as usize * bytes_per_pixel;
 
         TgaImage {
             data: vec![0; nbytes],
@@ -175,8 +175,8 @@ impl TgaImage {
         let header = TgaHeader::read_header(&mut file)
             .expect("An error occurred while reading header!");
 
-        let width  = header.width  as usize;
-        let height = header.height as usize;
+        let width  = header.width  as i32;
+        let height = header.height as i32;
         let bytes_per_pixel = header.bits_per_pixel >> 3;
 
         if width == 0 || height == 0 ||
@@ -186,7 +186,7 @@ impl TgaImage {
 
         let bytes_per_pixel = bytes_per_pixel as usize;
         let data = if header.datatypecode == 3 || header.datatypecode == 2 {
-            let mut data = vec![0; width * height * bytes_per_pixel];
+            let mut data = vec![0; (width * height) as usize * bytes_per_pixel];
             let _bytes_read = file.read_exact(&mut data)?;
             data
         } else if header.datatypecode == 10 || header.datatypecode == 11 {
@@ -211,13 +211,14 @@ impl TgaImage {
 
     pub fn flip_vertically(&mut self) {
 
-        let bytes_per_line = self.width * self.bytes_per_pixel;
+        let bytes_per_line = self.width as usize * self.bytes_per_pixel;
 
-        let half = self.height >> 1;
+        let height = self.height as usize;
+        let half = height >> 1;
 
         for j in 0..half {
             let l1 = j * bytes_per_line;
-            let l2 = (self.height - 1 - j) * bytes_per_line;
+            let l2 = (height - 1 - j) * bytes_per_line;
 
             unsafe {
                 std::ptr::swap_nonoverlapping(&mut self.data[l1], &mut self.data[l2], bytes_per_line);
@@ -292,9 +293,9 @@ impl TgaImage {
         Ok(())
     }
 
-    fn load_rle_data(file: &mut impl Read, width: usize, height: usize, bytes_per_pixel: usize) -> std::io::Result<Vec<u8>> {
+    fn load_rle_data(file: &mut impl Read, width: i32, height: i32, bytes_per_pixel: usize) -> std::io::Result<Vec<u8>> {
 
-        let pixel_count = width * height;
+        let pixel_count = (width * height) as usize;
         let mut data = vec![0; pixel_count * bytes_per_pixel];
         let mut current_pixel = 0;
         let mut current_byte = 0;
@@ -347,7 +348,7 @@ impl TgaImage {
     fn unload_rle_data(&self, file: &mut impl Write) -> std::io::Result<()> {
 
         const MAX_CHUNK_LENGTH: usize = 128;
-        let pixel_count = self.width * self.height;
+        let pixel_count = (self.width * self.height) as usize;
         let mut current_pixel = 0;
 
         while current_pixel < pixel_count {
@@ -380,27 +381,27 @@ impl TgaImage {
             current_pixel += run_length;
 
             file.write_u8((if raw { run_length - 1 } else { run_length + 127 }) as u8)?;
-            file.write(&self.data[chunk_start..(chunk_start + if raw {run_length * self.bytes_per_pixel} else {self.bytes_per_pixel})])?;
+            file.write(&self.data[chunk_start..(chunk_start + if raw { run_length * self.bytes_per_pixel} else {self.bytes_per_pixel})])?;
         }
 
         Ok(())
     }
 
-    pub fn set(&mut self, x: usize, y: usize, color: &TgaColor) {
+    pub fn set(&mut self, x: i32, y: i32, color: &TgaColor) {
         if x < self.width && y < self.height {
-            let location = (x + y * self.width) * self.bytes_per_pixel;
+            let location = (x + y * self.width) as usize * self.bytes_per_pixel;
             for i in 0..self.bytes_per_pixel {
                 self.data[location + i] = color[i];
             }
         }
     }
 
-    pub fn get(&mut self, x: usize, y: usize) -> std::io::Result<TgaColor> {
+    pub fn get(&mut self, x: i32, y: i32) -> std::io::Result<TgaColor> {
         if x >= self.width || y >= self.height {
             Err(std::io::Error::new(std::io::ErrorKind::Other, "Color location is out of bound!"))
         } else {
             let mut color = TgaColor::from_rgba(0, 0, 0, 0);
-            let location = (x + y * self.width) * self.bytes_per_pixel;
+            let location = (x + y * self.width) as usize * self.bytes_per_pixel;
             for i in 0..self.bytes_per_pixel {
                 color[i] = self.data[location + i];
             }

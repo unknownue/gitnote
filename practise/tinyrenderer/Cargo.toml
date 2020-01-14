@@ -9,10 +9,15 @@ edition = "2018"
 
 [dependencies]
 byteorder = "1.3"
+vek = "0.9"
 
 [dev-dependencies]
 criterion = "0.3"
 
 [[bench]]
 name = "bresenham_line"
+harness = false
+
+[[bench]]
+name = "linesweeping"
 harness = false

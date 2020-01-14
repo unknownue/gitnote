@@ -13,10 +13,10 @@ pub fn bresenham_benchmark(c: &mut Criterion) {
     let mut image = TgaImage::new(100, 100, TgaFormat::RGB);
 
     group.bench_function("v2", |b| b.iter(|| {
-        line_segment_v2(&mut image, 13, 20, 80, 40, WHITE).unwrap();
+        line_segment_v2(&mut image, 13, 20, 80, 40, &WHITE);
     }));
     group.bench_function("v3", |b| b.iter(|| {
-        line_segment_v3(&mut image, 13, 20, 80, 40, RED).unwrap();
+        line_segment_v3(&mut image, 13, 20, 80, 40, &RED);
     }));
 }
 
