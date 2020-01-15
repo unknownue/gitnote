@@ -2,7 +2,7 @@
 tags: [Firefox]
 title: Firefox UI Modification
 created: '2020-01-09T08:49:04.060Z'
-modified: '2020-01-09T09:28:07.013Z'
+modified: '2020-01-15T08:58:27.388Z'
 ---
 
 # Firefox UI Modification
@@ -26,7 +26,7 @@ Hidden files must be visible to see .mozilla folder.
 Mac OS X
 ```
 ~\Library\Mozilla\Firefox\Profiles\ PROFILE FOLDER NAME \ or
-~\Library\Application Support\Mozilla\Firefox\Profiles\ PROFILE FOLDER NAME \
+~\Library\Application Support\Firefox\Profiles\ PROFILE FOLDER NAME \chrome or
 \Users\ USERNAME \Library\Application\Support\Firefox\Profiles\
 ```
 From https://github.com/Aris-t2/CustomCSSforFx
@@ -59,7 +59,7 @@ From https://github.com/Aris-t2/CustomCSSforFx
 	#urlbar { -moz-box-ordinal-group: 11; }
 	.urlbarView {
 		top: unset !important;
-		bottom: 69px !important;
+		bottom: 61px !important;
 		box-shadow: none !important;
 	}
 	.search-one-offs { display: none !important; }

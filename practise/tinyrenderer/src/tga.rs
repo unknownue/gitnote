@@ -3,7 +3,9 @@ use std::ops::{Index, IndexMut, Mul};
 use std::path::Path;
 use std::fs::File;
 use std::io::{Read, Write};
+
 use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
+use itertools::izip;
 
 
 // #[repr(packed)] is equivalent to #[repr(packed(1))]
@@ -158,6 +160,10 @@ pub struct TgaImage {
 
 impl TgaImage {
 
+    pub fn unset() -> TgaImage {
+        TgaImage { data: vec![], width: 0, height: 0, bytes_per_pixel: 0 }
+    }
+
     pub fn new(width: i32, height: i32, format: TgaFormat) -> TgaImage {
         
         let bytes_per_pixel = format as usize;
@@ -229,13 +235,12 @@ impl TgaImage {
     pub fn flip_horizontally(&mut self) -> std::io::Result<()> {
 
         let half = self.width >> 1;
-        for i in 0..half {
-            for j in 0..self.height {
-                let c1 = self.get(i, j)?;
-                let c2 = self.get(self.width - 1 - i, j)?;
-                self.set(i, j, &c2);
-                self.set(self.width - 1 - i, j, &c1);
-            }
+        for (i, j) in izip!(0..half, 0..self.height) {
+            let c1 = self.get(i, j)?;
+            let c2 = self.get(self.width - 1 - i, j)?;
+            self.set(i, j, &c2);
+            self.set(self.width - 1 - i, j, &c1);
+
         }
 
         Ok(())
@@ -396,7 +401,7 @@ impl TgaImage {
         }
     }
 
-    pub fn get(&mut self, x: i32, y: i32) -> std::io::Result<TgaColor> {
+    pub fn get(&self, x: i32, y: i32) -> std::io::Result<TgaColor> {
         if x >= self.width || y >= self.height {
             Err(std::io::Error::new(std::io::ErrorKind::Other, "Color location is out of bound!"))
         } else {
