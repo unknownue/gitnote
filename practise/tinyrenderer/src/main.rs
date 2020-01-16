@@ -1,6 +1,6 @@
 
 use tinyrenderer::tga::{TgaImage, TgaFormat, TgaColor};
-use tinyrenderer::{Vec2i, Vec3f, Vec2f};
+use tinyrenderer::{Vec2i, Vec3f, Vec4f, Vec2f};
 use tinyrenderer::bresenham::line_segment_v3 as draw_line;
 
 
@@ -28,6 +28,7 @@ fn test_face_rasterization() -> std::io::Result<()> {
     let mut mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
     mesh.load_diffuse_map("./assets/african_head/african_head_diffuse.tga")?;
     let light_dir = Vec3f::new(0.0, 0.0, -1.0);
+    let camera_pos = Vec3f::new(0.0, 0.0, 3.0);
 
     struct ZbufferEx { buffer: [f32; 800 * 800], width: usize }
     impl ZBuffer for ZbufferEx {
@@ -36,11 +37,31 @@ fn test_face_rasterization() -> std::io::Result<()> {
     }
 
     let mut z_buffer = ZbufferEx { buffer: [std::f32::MIN; 800 * 800], width: 800 };
+    let projection_matrix: vek::Mat4<f32> = vek::Mat4::new(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, -1.0 / camera_pos.z, 1.0
+    );
+    let viewport = vek::Mat4::new(
+        400.0, 0.0, 0.0, 800.0 / 8.0 + 800.0 / 2.0,
+        0.0, 400.0, 0.0, 800.0 / 8.0 + 800.0 / 2.0,
+        0.0, 0.0, 255.0 / 2.0, 255.0 / 2.0,
+        0.0, 0.0, 0.0, 1.0
+    );
 
     for face in mesh.faces.iter() {
-        fn world_to_screen(world: &Vec3f) -> Vec3f {
-            Vec3f::new(((world.x + 1.0) * 400.0 + 0.5).floor(), ((world.y + 1.0) * 400.0 + 0.5).floor(), world.z)
-        }
+        let world_to_camera = |world: &Vec3f| -> Vec4f {
+            let argument_world = Vec4f::new(world.x, world.y, world.z, 1.0);
+            let coord_in_camera: Vec4f = projection_matrix * argument_world;
+            coord_in_camera
+        };
+
+        let camera_to_screen = |coord: Vec4f| -> Vec3f {
+//            Vec3f::new(((coord.x + 1.0) * 400.0 + 0.5).floor(), ((coord.y + 1.0) * 400.0 + 0.5).floor(), coord.z)
+            let screen_coord = viewport * coord;
+            Vec3f::new(screen_coord.x / screen_coord.w, screen_coord.y / screen_coord.w, screen_coord.z / screen_coord.w)
+        };
 
         let world_coords = [
             mesh.vertices[face[0]].position,
@@ -48,26 +69,22 @@ fn test_face_rasterization() -> std::io::Result<()> {
             mesh.vertices[face[2]].position,
         ];
 
-        let uv_multiplier = Vec2f::new(mesh.diffuse_map.width as f32, mesh.diffuse_map.height as f32);
-        let uvs = [
-            mesh.vertices[face[0]].uv * uv_multiplier,
-            mesh.vertices[face[1]].uv * uv_multiplier,
-            mesh.vertices[face[2]].uv * uv_multiplier,
-        ];
-
         let screen_coords = [
-            world_to_screen(&world_coords[0]),
-            world_to_screen(&world_coords[1]),
-            world_to_screen(&world_coords[2]),
+            camera_to_screen(world_to_camera(&world_coords[0])),
+            camera_to_screen(world_to_camera(&world_coords[1])),
+            camera_to_screen(world_to_camera(&world_coords[2])),
         ];
 
         let n = (world_coords[2] - world_coords[0]).cross(world_coords[1] - world_coords[0]).normalized();
         let intensity = n.dot(light_dir);
         if intensity > 0.0 {
-//            let intensity = (intensity * 255.0) as u8;
-//            let color = TgaColor::from_rgb(intensity, intensity, intensity);
-//            use tinyrenderer::rasterization::barycentric_rasterization_v2;
-//            barycentric_rasterization_v2(&mut image, &mut z_buffer, screen_coords, &color);
+            let uv_multiplier = Vec2f::new(mesh.diffuse_map.width as f32, mesh.diffuse_map.height as f32);
+            let uvs = [
+                mesh.vertices[face[0]].uv * uv_multiplier,
+                mesh.vertices[face[1]].uv * uv_multiplier,
+                mesh.vertices[face[2]].uv * uv_multiplier,
+            ];
+
             barycentric_rasterization_diffuse(&mut image, &mut z_buffer, screen_coords, uvs, &mesh.diffuse_map, intensity)?;
         }
     }

@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::{Read, Write};
 
 use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
-use itertools::izip;
+use itertools::iproduct;
 
 
 // #[repr(packed)] is equivalent to #[repr(packed(1))]
@@ -235,7 +235,7 @@ impl TgaImage {
     pub fn flip_horizontally(&mut self) -> std::io::Result<()> {
 
         let half = self.width >> 1;
-        for (i, j) in izip!(0..half, 0..self.height) {
+        for (i, j) in iproduct!(0..half, 0..self.height) {
             let c1 = self.get(i, j)?;
             let c2 = self.get(self.width - 1 - i, j)?;
             self.set(i, j, &c2);
