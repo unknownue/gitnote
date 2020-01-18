@@ -2,7 +2,7 @@
 tags: [Configuration]
 title: Karabiner Customized
 created: '2020-01-15T14:19:15.323Z'
-modified: '2020-01-15T14:21:06.537Z'
+modified: '2020-01-18T13:24:07.797Z'
 ---
 
 # Karabiner Customized
@@ -144,7 +144,43 @@ In `~/.config/karabiner/assets/complex_modifications/karabiner-programming.json`
                     ]
                 }
             ]
+        },
+        {
+            "description": "Press Ctrl + grave accent key to toggle tmux prefix in Terminal",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "grave_accent_and_tilde",
+                        "modifiers": {
+                            "mandatory": [
+                                "left_control"  
+                            ],
+                            "optional": [
+                                "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "b",
+                            "modifiers": "left_control"
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                                "^io\\.alacritty$",
+                                "^io\\.coressh\\.shell$",
+                                "^com\\.apple\\.Terminal"
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
+
 ```
