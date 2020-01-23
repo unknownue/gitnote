@@ -1,7 +1,8 @@
 ---
+tags: [Docker]
 title: Run Docker GUI on macOS
 created: '2020-01-17T02:25:41.235Z'
-modified: '2020-01-17T02:28:35.074Z'
+modified: '2020-01-19T01:54:44.267Z'
 ---
 
 # Run Docker GUI on macOS

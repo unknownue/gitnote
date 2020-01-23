@@ -1,8 +1,9 @@
 ---
+deleted: true
 tags: [Command Line]
 title: 7Z Usage
 created: '2019-12-27T12:12:04.342Z'
-modified: '2020-01-16T12:39:26.134Z'
+modified: '2020-01-19T01:56:34.651Z'
 ---
 
 # 7Z Usage
