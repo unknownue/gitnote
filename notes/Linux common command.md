@@ -1,11 +1,16 @@
 ---
-tags: [Command Line]
+tags: [Command Line, Linux]
 title: Linux common command
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-01-19T09:16:08.268Z'
+modified: '2020-01-24T09:42:08.179Z'
 ---
 
 # Linux common command
+
+## Query the number of threads of processor
+```shell
+$ nproc
+```
 
 ## View process status
 ```shell
