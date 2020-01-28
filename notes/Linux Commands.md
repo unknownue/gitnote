@@ -1,11 +1,11 @@
 ---
 tags: [Command Line, Linux]
-title: Linux common command
+title: Linux Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-01-24T09:42:08.179Z'
+modified: '2020-01-27T16:06:55.780Z'
 ---
 
-# Linux common command
+# Linux Commands
 
 ## Query the number of threads of processor
 ```shell

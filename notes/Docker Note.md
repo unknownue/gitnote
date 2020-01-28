@@ -2,7 +2,7 @@
 tags: [Command Line, Docker]
 title: Docker Note
 created: '2020-01-19T06:53:51.825Z'
-modified: '2020-01-27T09:50:48.314Z'
+modified: '2020-01-28T02:24:03.634Z'
 ---
 
 # Docker Note
@@ -34,4 +34,7 @@ docker run --rm -it -p 8888:8888 -v (pwd):/root/dev/ docker_image_name
 
 # In container
 jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
+
+# Open new interative terminal in container
+docker exec -it running_container_name bash
 ```
