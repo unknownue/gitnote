@@ -1,6 +1,7 @@
 
 use crate::tga::{TgaColor, TgaImage};
-use crate::{Vec2i, Vec2f, Vec3f};
+use crate::{Vec2i, Vec3i, Vec2f, Vec3f};
+use crate::{veci2f, vecf2i};
 
 use itertools::iproduct;
 
@@ -78,6 +79,50 @@ pub fn line_sweeping_v2(image: &mut TgaImage, mut v0: Vec2i, mut v1: Vec2i, mut 
     }
 }
 
+pub fn line_sweeping_gouraud_shading(image: &mut TgaImage, zbuffer: &mut impl ZBuffer, mut v0: Vec3i, mut v1: Vec3i, mut v2: Vec3i, mut ity0: f32, mut ity1: f32, mut ity2: f32) {
+    if v0.y == v1.y && v0.y == v2.y { return }
+    if v0.y > v1.y { std::mem::swap(&mut v0, &mut v1); std::mem::swap(&mut ity0, &mut ity1); }
+    if v0.y > v2.y { std::mem::swap(&mut v0, &mut v2); std::mem::swap(&mut ity0, &mut ity2); }
+    if v1.y > v2.y { std::mem::swap(&mut v1, &mut v2); std::mem::swap(&mut ity1, &mut ity2); }
+
+    let total_height = v2.y - v0.y;
+
+    for i in 0..total_height {
+        let second_half = i as i32 > v1.y - v0.y || v1.y == v0.y;
+        let segment_height = if second_half { v2.y - v1.y } else { v1.y - v0.y } as f32;
+
+        let alpha = i as f32 / total_height as f32;
+        let beta = if second_half { i - (v1.y - v0.y) } else { i } as f32 / segment_height;
+
+        let mut a = vecf2i(veci2f(v0) + (veci2f(v2 - v0) * alpha));
+        let mut b = if second_half {
+            vecf2i(veci2f(v1) + (veci2f(v2 - v1) * beta))
+        } else {
+            vecf2i(veci2f(v0) + (veci2f(v1 - v0) * beta))
+        };
+
+        let mut a_intensity = ity0 + (ity2 - ity0) * alpha;
+        let mut b_intensity = if second_half { ity1 + (ity2 - ity1) * beta } else { ity0 + (ity1 - ity0) * beta };
+
+        if a.x > b.x {
+            std::mem::swap(&mut a, &mut b);
+            std::mem::swap(&mut a_intensity, &mut b_intensity);
+        }
+
+        for x in a.x..b.x {
+            let phi = (x - a.x) as f32 / (b.x - a.x) as f32;
+            let p = vecf2i(veci2f(a) + veci2f(b - a) * phi);
+            let p_intensity = a_intensity + (b_intensity - a_intensity) * phi;
+
+            if p.x >= image.width || p.y >= image.height || p.x < 0 || p.y < 0 { continue }
+            if zbuffer.get(p.x as usize, p.y as usize) < p.z as f32 {
+                zbuffer.set(x as usize, p.y as usize, p.z as f32);
+                image.set(p.x, p.y, &(TgaColor::from_rgb(255, 255, 255) * p_intensity));
+            }
+        }
+    }
+
+}
 
 pub fn barycentric_rasterization_v1(image: &mut TgaImage, pts: [Vec2i; 3], color: &TgaColor) {
 

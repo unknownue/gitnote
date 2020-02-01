@@ -1,8 +1,8 @@
 ---
-tags: [Rendering]
+tags: [Rendering, Rust]
 title: Awesome Rust GameDev
 created: '2020-01-30T12:30:39.680Z'
-modified: '2020-01-30T12:31:00.043Z'
+modified: '2020-02-01T01:14:55.187Z'
 ---
 
 # Awesome Rust GameDev
@@ -72,10 +72,11 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 
 ## GUI
 
-| Library                                        | is binding? | Description                                                  |
-| ---------------------------------------------- | ----------- | ------------------------------------------------------------ |
-| [iced](https://github.com/hecrj/iced)          | No          | A renderer-agnostic GUI library for Rust focused on simplicity and type-safety. |
-| [imgui-rs](https://github.com/Gekkio/imgui-rs) | Yes         | Rust bindings for dear imgui.                                |
+| Library                                                   | is binding? | Description                                                  |
+| --------------------------------------------------------- | ----------- | ------------------------------------------------------------ |
+| [iced](https://github.com/hecrj/iced)                     | No          | A renderer-agnostic GUI library for Rust focused on simplicity and type-safety. |
+| [imgui-rs](https://github.com/Gekkio/imgui-rs)            | Yes         | Rust bindings for dear imgui.                                |
+| [imgui-inspect](https://github.com/aclysma/imgui-inspect) | Yes         | An inspector UI using imgui in Rust.                         |
 
 
 

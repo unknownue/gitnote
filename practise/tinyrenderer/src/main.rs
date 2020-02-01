@@ -2,11 +2,18 @@
 use tinyrenderer::tga::{TgaImage, TgaFormat, TgaColor};
 use tinyrenderer::{Vec2i, Vec3f, Vec4f, Vec2f};
 use tinyrenderer::bresenham::line_segment_v3 as draw_line;
+use tinyrenderer::rasterization::ZBuffer;
 
 
 const OUTPUT_PATH: &'static str = "output.tga";
 const RED  : TgaColor = TgaColor::from_rgb(0,0,255);
 const WHITE: TgaColor = TgaColor::from_rgb(255, 255, 255);
+
+struct ZbufferEx { buffer: [f32; 800 * 800], width: usize }
+impl ZBuffer for ZbufferEx {
+    fn get(&self, x: usize, y: usize) -> f32 { self.buffer[x + y * self.width] }
+    fn set(&mut self, x: usize, y: usize, v: f32) { self.buffer[x + y * self.width] = v; }
+}
 
 
 fn main() -> std::io::Result<()> {
@@ -15,26 +22,73 @@ fn main() -> std::io::Result<()> {
     // test_draw_line()
     // test_draw_face()
     // test_triangle_rasterization()
-    test_face_rasterization()
+    // test_face_rasterization()
+    test_gouraud_shading()
 }
 
+fn test_gouraud_shading() -> std::io::Result<()> {
+
+    use tinyrenderer::mesh::ObjMesh;
+    use tinyrenderer::rasterization::line_sweeping_gouraud_shading;
+    use tinyrenderer::camera::{lookat, viewport};
+    use tinyrenderer::vecf2i;
+
+    let mut image = TgaImage::new(800, 800, TgaFormat::RGB);
+    let mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
+    let mut z_buffer = ZbufferEx { buffer: [std::f32::MIN; 800 * 800], width: 800 };
+
+    let light_dir = Vec3f::new(1.0, -1.0, 1.0).normalized();
+    let eye_pos = Vec3f::new(1.0, 0.5, 5.0);
+    let center = Vec3f::zero();
+
+    let model_view = lookat(eye_pos, center, Vec3f::unit_y());
+    let projection: vek::Mat4<f32> = vek::Mat4::new(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, -1.0 / (eye_pos - center).magnitude(), 1.0,
+    );
+    let view_port = viewport(100, 100, 800 * 3 / 4, 800 * 3 / 4, 255);
+    let affine_matrix = view_port * projection * model_view;
+
+    for face in mesh.faces.iter() {
+
+        let world_coords = [
+            mesh.vertices[face[0]].position,
+            mesh.vertices[face[1]].position,
+            mesh.vertices[face[2]].position,
+        ];
+
+        let screen_coords = [
+            vecf2i((affine_matrix * Vec4f::from_point(world_coords[0])).xyz()),
+            vecf2i((affine_matrix * Vec4f::from_point(world_coords[1])).xyz()),
+            vecf2i((affine_matrix * Vec4f::from_point(world_coords[2])).xyz()),
+        ];
+
+        let intensity = [
+            Vec3f::dot(mesh.vertices[face[0]].normal, light_dir),
+            Vec3f::dot(mesh.vertices[face[1]].normal, light_dir),
+            Vec3f::dot(mesh.vertices[face[2]].normal, light_dir),
+        ];
+
+        line_sweeping_gouraud_shading(&mut image, &mut z_buffer, screen_coords[0], screen_coords[1], screen_coords[2], intensity[0], intensity[1], intensity[2]);
+    }
+
+    image.flip_vertically();
+    image.write_tga_file(OUTPUT_PATH, true)
+}
+
+#[allow(unused)]
 fn test_face_rasterization() -> std::io::Result<()> {
 
     use tinyrenderer::mesh::ObjMesh;
     use tinyrenderer::rasterization::barycentric_rasterization_diffuse;
-    use tinyrenderer::rasterization::ZBuffer;
 
     let mut image = TgaImage::new(800, 800, TgaFormat::RGB);
     let mut mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
     mesh.load_diffuse_map("./assets/african_head/african_head_diffuse.tga")?;
     let light_dir = Vec3f::new(0.0, 0.0, -1.0);
     let camera_pos = Vec3f::new(0.0, 0.0, 1.5);
-
-    struct ZbufferEx { buffer: [f32; 800 * 800], width: usize }
-    impl ZBuffer for ZbufferEx {
-        fn get(&self, x: usize, y: usize) -> f32 { self.buffer[x + y * self.width] }
-        fn set(&mut self, x: usize, y: usize, v: f32) { self.buffer[x + y * self.width] = v; }
-    }
 
     let mut z_buffer = ZbufferEx { buffer: [std::f32::MIN; 800 * 800], width: 800 };
     let projection_matrix: vek::Mat4<f32> = vek::Mat4::new(
@@ -113,6 +167,7 @@ fn test_draw_face() -> std::io::Result<()> {
             let v0 = &mesh.vertices[face[j]];
             let v1 = &mesh.vertices[face[(j + 1) % 3]];
 
+            // convert [-1, 1] to [0, 800.0]
             let x0 = ((v0.position[0] + 1.0) * 400.0) as i32;
             let y0 = ((v0.position[1] + 1.0) * 400.0) as i32;
             let x1 = ((v1.position[0] + 1.0) * 400.0) as i32;
