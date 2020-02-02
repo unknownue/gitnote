@@ -4,6 +4,7 @@ pub mod bresenham;
 pub mod mesh;
 pub mod rasterization;
 pub mod camera;
+pub mod shader;
 
 pub type Vec4f = vek::Vec4<f32>;
 pub type Vec3f = vek::Vec3<f32>;

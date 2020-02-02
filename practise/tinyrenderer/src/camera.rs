@@ -9,15 +9,18 @@ pub fn lookat(eye: Vec3f, center: Vec3f, up: Vec3f) -> Mat4f {
     let x = Vec3f::cross(up, z).normalized();
     let y = Vec3f::cross(z, x).normalized();
 
-    let mut minv = Mat4f::identity();
-    let mut translation = Mat4f::identity();
-
-    for i in 0..3 {
-        minv[(0, i)] = x[i];
-        minv[(1, i)] = y[i];
-        minv[(2, i)] = z[i];
-        translation[(i, 3)] = -center[i];
-    }
+    let minv = Mat4f::new(
+        x[0], x[1], x[2], 0.0,
+        y[0], y[1], y[2], 0.0,
+        z[0], z[1], z[2], 0.0,
+         0.0,  0.0,  0.0, 1.0,
+    );
+    let translation = Mat4f::new(
+        1.0, 0.0, 0.0, -center[0],
+        0.0, 1.0, 0.0, -center[1],
+        0.0, 0.0, 1.0, -center[2],
+        0.0, 0.0, 0.0, 1.0,
+    );
 
     minv * translation
 }
@@ -30,5 +33,14 @@ pub fn viewport(x: i32, y: i32, w: u32, h: u32, depth: u32) -> Mat4f {
             0.0, h / 2.0,     0.0, y + h / 2.0,
             0.0,     0.0, d / 2.0,     d / 2.0,
             0.0,     0.0,     0.0,         1.0,
+    )
+}
+
+pub fn projection(coeff: f32) -> Mat4f {
+    vek::Mat4::new(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, -1.0 / coeff, 1.0,
     )
 }

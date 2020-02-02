@@ -21,8 +21,8 @@ pub struct ObjMesh {
     pub faces: Vec<[usize; 3]>,
 
     pub diffuse_map : TgaImage,
-//    normal_map  : TgaImage,
-//    specular_map: TgaImage,
+    pub normal_map  : TgaImage,
+    pub specular_map: TgaImage,
 }
 
 impl ObjMesh {
@@ -95,6 +95,8 @@ impl ObjMesh {
         let mesh = ObjMesh {
             vertices, faces,
             diffuse_map: TgaImage::unset(),
+            normal_map: TgaImage::unset(),
+            specular_map: TgaImage::unset(),
         };
         Ok(mesh)
     }
@@ -102,6 +104,18 @@ impl ObjMesh {
     pub fn load_diffuse_map(&mut self, path: impl AsRef<Path>) -> std::io::Result<()> {
         self.diffuse_map = TgaImage::from_path(path)?;
         self.diffuse_map.flip_vertically();
+        Ok(())
+    }
+
+    pub fn load_normal_map(&mut self, path: impl AsRef<Path>) -> std::io::Result<()> {
+        self.normal_map = TgaImage::from_path(path)?;
+        self.normal_map.flip_vertically();
+        Ok(())
+    }
+
+    pub fn load_specular_map(&mut self, path: impl AsRef<Path>) -> std::io::Result<()> {
+        self.specular_map = TgaImage::from_path(path)?;
+        self.specular_map.flip_vertically();
         Ok(())
     }
 

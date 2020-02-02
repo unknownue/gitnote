@@ -26,6 +26,7 @@ modified: '2020-02-01T01:14:55.187Z'
 - [Performance](#Performance)
 - [Language Extensions](#Language Extensions)
 - [Games](#Games)
+- [Emulator](#Emulator)
 
 
 
@@ -44,6 +45,7 @@ modified: '2020-02-01T01:14:55.187Z'
 | [luminance](https://github.com/phaazon/luminance-rs) | Type-safe, type-level and stateless Rust graphics framework. |
 | [raylib-rs](https://github.com/deltaphc/raylib-rs)   | Rust binding for [raylib](http://www.raylib.com/) 2.0.       |
 | [pixels](https://github.com/parasyte/pixels)         | A tiny hardware-accelerated pixel frame buffer.              |
+| [euc](https://github.com/zesterer/euc)               | A software rendering crate that lets you write shaders with Rust. |
 
 
 
@@ -162,6 +164,16 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 | ----------------------------------------------------------- | ------------------------------------------------------------ |
 | [klondike-rs](https://github.com/chrisbouchard/klondike-rs) | CLI Klondike Solitaire written in Rust                       |
 | [skulpin](https://github.com/aclysma/skulpin)               | Drawing hardware-accelerated 2D by combining vulkan and skia. |
+
+
+
+## Emulator
+
+| Library                                     | Description               |
+| ------------------------------------------- | ------------------------- |
+| [nestur](https://github.com/spieglt/nestur) | Nestur is an NES emulator |
+
+
 
 
 
