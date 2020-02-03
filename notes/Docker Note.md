@@ -2,7 +2,7 @@
 tags: [Command Line, Docker]
 title: Docker Note
 created: '2020-01-19T06:53:51.825Z'
-modified: '2020-01-28T02:24:03.634Z'
+modified: '2020-02-03T08:38:02.313Z'
 ---
 
 # Docker Note
@@ -27,6 +27,11 @@ Remove all unsed images
 docker image prune -a
 ```
 
+Open new interative terminal in running container
+```
+docker exec -it running_container_name bash
+```
+
 Run jupyter notebook
 ```shell
 # Launch container
@@ -34,7 +39,13 @@ docker run --rm -it -p 8888:8888 -v (pwd):/root/dev/ docker_image_name
 
 # In container
 jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
+```
 
-# Open new interative terminal in container
-docker exec -it running_container_name bash
+Run tensorboard
+```shell
+# Launch container
+docker run --rm -it -p 6006:6006 -v (pwd):/root/dev/ docker_image_name
+
+# In container
+tensorboard --logdir log/path/ --host 0.0.0.0 --port 6006
 ```

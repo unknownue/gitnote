@@ -5,7 +5,7 @@ use std::io::BufReader;
 use std::io::prelude::*;
 
 use crate::{Vec2f, Vec3f};
-use crate::tga::TgaImage;
+use crate::tga::{TgaImage, TgaColor};
 
 
 #[derive(Debug, Clone, Default)]
@@ -117,6 +117,36 @@ impl ObjMesh {
         self.specular_map = TgaImage::from_path(path)?;
         self.specular_map.flip_vertically();
         Ok(())
+    }
+
+    pub fn sample_diffuse(&self, uv: Vec2f) -> TgaColor {
+        self.diffuse_map.get(
+            (uv[0] * self.diffuse_map.width  as f32) as i32,
+            (uv[1] * self.diffuse_map.height as f32) as i32,
+        ).unwrap()
+    }
+
+    pub fn sample_normal(&self, uv: Vec2f) -> Vec3f {
+        let c = self.normal_map.get(
+            (uv[0] * self.normal_map.width  as f32) as i32,
+            (uv[1] * self.normal_map.height as f32) as i32,
+        ).unwrap();
+
+        // Why inverse the order????
+        Vec3f::new(
+            (c[2] as f32 / 255.0) * 2.0 - 1.0,
+            (c[1] as f32 / 255.0) * 2.0 - 1.0,
+            (c[0] as f32 / 255.0) * 2.0 - 1.0,
+        )
+    }
+
+    pub fn sample_specular(&self, uv: Vec2f) -> f32 {
+        let c = self.specular_map.get(
+            (uv[0] * self.specular_map.width  as f32) as i32,
+            (uv[1] * self.specular_map.height as f32) as i32,
+        ).unwrap();
+
+        c[0] as f32
     }
 
     fn print_help_message(path: impl AsRef<Path>, vertices: &[Vertex], faces: &[[usize; 3]]) {

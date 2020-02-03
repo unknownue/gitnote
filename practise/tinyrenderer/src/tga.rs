@@ -6,7 +6,6 @@ use std::io::{Read, Write};
 
 use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
 use itertools::iproduct;
-use crate::{Vec2f, Vec3f};
 
 
 // #[repr(packed)] is equivalent to #[repr(packed(1))]
@@ -400,21 +399,6 @@ impl TgaImage {
                 self.data[location + i] = color[i];
             }
         }
-    }
-
-    pub fn sample_diffuse(&self, uv: Vec2f) -> TgaColor {
-        self.get((uv[0] * self.width as f32) as i32, (uv[1] * self.height as f32) as i32).unwrap()
-    }
-
-    pub fn sample_normal(&self, uv: Vec2f) -> Vec3f {
-        let c = self.get((uv[0] * self.width as f32) as i32, (uv[1] * self.height as f32) as i32).unwrap();
-
-        // Why inverse the order
-        Vec3f::new(
-            (c[2] as f32 / 255.0) * 2.0 - 1.0,
-            (c[1] as f32 / 255.0) * 2.0 - 1.0,
-            (c[0] as f32 / 255.0) * 2.0 - 1.0,
-        )
     }
 
     pub fn get(&self, x: i32, y: i32) -> std::io::Result<TgaColor> {

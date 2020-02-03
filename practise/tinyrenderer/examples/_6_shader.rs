@@ -74,7 +74,7 @@ impl IShader for ToonShader {
 
 // https://github.com/ssloy/tinyrenderer/wiki/Lesson-6-Shaders-for-the-software-renderer#my-implementation-of-shaders-shown-on-gouraud-shading
 #[allow(unused)]
-fn ground_shading(image: &mut TgaImage, affine_transform: Mat4f, mut z_buffer: ZbufferEx) -> std::io::Result<()> {
+fn ground_shading(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport: Mat4f, mut z_buffer: ZbufferEx) -> std::io::Result<()> {
 
     let mesh = ObjMesh::load_mesh("./assets/diablo3_pose/diablo3_pose.obj")?;
     let faces = mesh.faces.clone();
@@ -82,7 +82,7 @@ fn ground_shading(image: &mut TgaImage, affine_transform: Mat4f, mut z_buffer: Z
     let mut shader = GroundShader { // or GroundShader
         mesh,
         varying_intensity: Vec3f::zero(),
-        affine_transform,
+        affine_transform: viewport * projection * model_view,
     };
     for face in faces {
 
@@ -131,14 +131,14 @@ impl IShader for PhongShader {
         let intensity: f32 = Vec3f::dot(self.varying_intensity, barycentric);
         // interpolate uv for the current pixel
         let uv = sample_barycentric_uv(&self.varying_uv, barycentric);
-        let color = self.mesh.diffuse_map.sample_diffuse(uv) * intensity;
+        let color = self.mesh.sample_diffuse(uv) * intensity;
         Some(color)
     }
 }
 
 // https://github.com/ssloy/tinyrenderer/wiki/Lesson-6-Shaders-for-the-software-renderer#textures
 #[allow(unused)]
-fn textures(image: &mut TgaImage, affine_transform: Mat4f, mut z_buffer: ZbufferEx) -> std::io::Result<()> {
+fn textures(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport: Mat4f, mut z_buffer: ZbufferEx) -> std::io::Result<()> {
 
     let mut mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
     let faces = mesh.faces.clone();
@@ -148,7 +148,7 @@ fn textures(image: &mut TgaImage, affine_transform: Mat4f, mut z_buffer: Zbuffer
         mesh,
         varying_intensity: Vec3f::zero(),
         varying_uv: [Vec2f::zero(); 3],
-        affine_transform,
+        affine_transform: viewport * projection * model_view,
     };
 
     for face in faces {
@@ -165,7 +165,7 @@ fn textures(image: &mut TgaImage, affine_transform: Mat4f, mut z_buffer: Zbuffer
 
 
 // --------------------------------------------------------------------------------------
-struct NormalMappingShader {
+struct SpecularShader {
     mesh: ObjMesh,
     varying_uv: [Vec2f; 3],
 
@@ -174,7 +174,7 @@ struct NormalMappingShader {
     affine_transform: Mat4f,
 }
 
-impl IShader for NormalMappingShader {
+impl IShader for SpecularShader {
 
     fn vertex(&mut self, vertex_idx: usize, nthvert: usize) -> Vec4f {
         let vertex = &self.mesh.vertices[vertex_idx];
@@ -194,29 +194,40 @@ impl IShader for NormalMappingShader {
         }
 
         let uv = sample_barycentric_uv(&self.varying_uv, barycentric);
-        let n = (self.uniform_mit * Vec4f::from_point(self.mesh.normal_map.sample_normal(uv))).normalized().xyz();
+        let n = (self.uniform_mit * Vec4f::from_point(self.mesh.sample_normal(uv))).normalized().xyz();
         let l = (self.uniform_m   * Vec4f::from_point(LIGHT_DIR)).normalized().xyz();
+        let r = (2.0 * n * Vec3f::dot(n, l) - l).normalized(); // reflected light
 
-        let intensity: f32 = f32::max(0.0, Vec3f::dot(n, l));
-        let color = self.mesh.diffuse_map.sample_diffuse(uv) * intensity;
+        // specular (here 6.0 is a magic number to adjust specular index)
+        let specular = f32::max(r.z, 0.0).powf(self.mesh.sample_specular(uv) / 10.0);
+        // diffuse
+        let diffuse: TgaColor = self.mesh.sample_diffuse(uv);
+        // 5.0 is ambient estimation, 0.6 to adjust specular
+        let diff = f32::max(0.0, Vec3f::dot(n, l));
+        let color = TgaColor::from_rgb(
+            f32::min(5.0 + diffuse[0] as f32 * (diff + 0.6 * specular), 255.0) as u8,
+            f32::min(5.0 + diffuse[1] as f32 * (diff + 0.6 * specular), 255.0) as u8,
+            f32::min(5.0 + diffuse[2] as f32 * (diff + 0.6 * specular), 255.0) as u8,
+        );
         Some(color)
     }
 }
 
-// https://github.com/ssloy/tinyrenderer/wiki/Lesson-6-Shaders-for-the-software-renderer#normalmapping
+// https://github.com/ssloy/tinyrenderer/wiki/Lesson-6-Shaders-for-the-software-renderer#specular-mapping
 #[allow(unused)]
-fn normal_mapping(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport: Mat4f, mut z_buffer: ZbufferEx) -> std::io::Result<()> {
+fn specular_mapping(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport: Mat4f, mut z_buffer: ZbufferEx) -> std::io::Result<()> {
 
-    let mut mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
+    let mut mesh = ObjMesh::load_mesh("./assets/diablo3_pose/diablo3_pose.obj")?;
     let faces = mesh.faces.clone();
-    mesh.load_diffuse_map("./assets/african_head/african_head_diffuse.tga")?;
-    mesh.load_normal_map("./assets/african_head/african_head_nm_tangent.tga")?;
+    mesh.load_diffuse_map("./assets/diablo3_pose/diablo3_pose_diffuse.tga")?;
+    mesh.load_normal_map("./assets/diablo3_pose/diablo3_pose_nm.tga")?;
+    mesh.load_specular_map("./assets/diablo3_pose/diablo3_pose_spec.tga")?;
 
-    let mut shader = NormalMappingShader {
+    let mut shader = SpecularShader {
         mesh,
         varying_uv: [Vec2f::zero(); 3],
         uniform_m       : projection * model_view,
-        uniform_mit     : (projection * model_view).transposed(),
+        uniform_mit     : (projection * model_view).inverted().transposed(),
         affine_transform: viewport * projection * model_view,
     };
 
@@ -241,11 +252,10 @@ fn main() -> std::io::Result<()> {
     let model_view: vek::Mat4<f32> = lookat(EYE_POSITION, CENTER, UP);
     let projection: vek::Mat4<f32> = projection((EYE_POSITION - CENTER).magnitude());
     let view_port : vek::Mat4<f32> = viewport(WIDTH / 8, HEIGHT / 8, WIDTH as u32 * 3 / 4, HEIGHT as u32 * 3 / 4, 255);
-    let affine_matrix = view_port * projection * model_view;
 
-    // ground_shading(&mut image, affine_matrix, z_buffer)?;
-    // textures(&mut image, affine_matrix, z_buffer)?;
-    normal_mapping(&mut image, projection, model_view, view_port, z_buffer)?;
+    // ground_shading(&mut image, projection, model_view, view_port, z_buffer)?;
+    // textures(&mut image, projection, model_view, view_port, z_buffer)?;
+    specular_mapping(&mut image, projection, model_view, view_port, z_buffer)?;
 
     image.flip_vertically(); // place the origin in the bottom left corner of the image
     image.write_tga_file(OUTPUT_PATH, true)

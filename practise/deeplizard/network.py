@@ -12,7 +12,7 @@ class Network(torch.nn.Module):
 
         self.fc1 = torch.nn.Linear(in_features=12 * 4 * 4, out_features=120)
         self.fc2 = torch.nn.Linear(in_features=120, out_features=60)
-        self.fc3 = torch.nn.Linear(in_features=60, out_features=10)
+        self.out = torch.nn.Linear(in_features=60, out_features=10)
 
     def forward(self, t: torch.Tensor):
 
@@ -26,7 +26,7 @@ class Network(torch.nn.Module):
         t = F.relu(self.fc1(t))
 
         t = F.relu(self.fc2(t))
-        t = t.self.out(t)
+        t = self.out(t)
 
         return t
 
