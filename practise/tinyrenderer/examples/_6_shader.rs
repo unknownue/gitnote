@@ -6,6 +6,7 @@ use tinyrenderer::mesh::ObjMesh;
 use tinyrenderer::rasterization::triangle;
 use tinyrenderer::camera::{lookat, viewport, projection, sample_barycentric_uv};
 use tinyrenderer::shader::IShader;
+use tinyrenderer::Mat3Ext;
 
 const OUTPUT_PATH: &'static str = "output.tga";
 const WIDTH : i32 = 800;
@@ -121,13 +122,6 @@ impl IShader for TextureShader {
 
     fn fragment(&self, barycentric: Vec3f) -> Option<TgaColor> {
 
-        fn sample_barycentric_uv(uvs: &[Vec2f; 3], bc: Vec3f) -> Vec2f {
-            Vec2f::new(
-                uvs[0].x * bc.x + uvs[1].x * bc.y + uvs[2].x * bc.z,
-                uvs[0].y * bc.x + uvs[1].y * bc.y + uvs[2].y * bc.z,
-            )
-        }
-
         let intensity: f32 = Vec3f::dot(self.varying_intensity, barycentric);
         // interpolate uv for the current pixel
         let uv = sample_barycentric_uv(&self.varying_uv, barycentric);
@@ -240,8 +234,9 @@ fn specular_mapping(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, 
 // --------------------------------------------------------------------------------------
 struct TBNPhongShader {
     mesh: ObjMesh,
-    varying_uv: [Vec2f; 3],
-    varying_nrm: Mat3f, // Store the normal of each vertex
+    varying_uv: [Vec2f; 3], // triangle uv coordinates, written by the vertex shader, read by the fragment shader
+    varying_nrm: Mat3f,     // normal per vertex to be interpolated by Fragment shader
+    ndc_tri: Mat3f,         // triangle in normalized device coordinates
 
     light_dir: Vec3f,
     uniform_m  : Mat4f, // Projection*ModelView
@@ -254,18 +249,12 @@ impl IShader for TBNPhongShader {
     fn vertex(&mut self, vertex_idx: usize, nthvert: usize) -> Vec4f {
         let vertex = &self.mesh.vertices[vertex_idx];
 
-        fn mat3_set_column(m: &mut Mat3f, column_index: usize, v: Vec3f) {
-            m[(0, column_index)] = v.x;
-            m[(1, column_index)] = v.y;
-            m[(2, column_index)] = v.z;
-        }
-
         // mul_direction is shortcut for Mat4 * Vec4::from_direction(normal)
-        mat3_set_column(&mut self.varying_nrm, nthvert, self.uniform_mit.mul_direction(vertex.normal));
+        self.varying_nrm.set_column(nthvert, self.uniform_mit.mul_direction(vertex.normal));
         self.varying_uv[nthvert]  = vertex.uv;
+        self.ndc_tri.set_column(nthvert, (self.uniform_m * Vec4f::from_point(vertex.position)).homogenized().xyz());
 
-        let gl_vertex = self.affine_transform * Vec4f::from_point(vertex.position);
-        gl_vertex
+        self.affine_transform * Vec4f::from_point(vertex.position)
     }
 
     fn fragment(&self, barycentric: Vec3f) -> Option<TgaColor> {
@@ -273,7 +262,25 @@ impl IShader for TBNPhongShader {
         let bn: Vec3f = (self.varying_nrm * barycentric).normalized();
         let uv: Vec2f = sample_barycentric_uv(&self.varying_uv, barycentric);
 
-        let diff = f32::max(Vec3f::dot(bn, self.light_dir), 0.0);
+        let A = Mat3f::from_row_vecs([
+            self.ndc_tri.get_column(1) - self.ndc_tri.get_column(0),
+            self.ndc_tri.get_column(2) - self.ndc_tri.get_column(0),
+            bn,
+        ]);
+        let AI = A.inverted();
+
+        let i: Vec3f = AI * Vec3f::new(self.varying_uv[1].x - self.varying_uv[0].x, self.varying_uv[2].x - self.varying_uv[0].x, 0.0);
+        let j: Vec3f = AI * Vec3f::new(self.varying_uv[1].y - self.varying_uv[0].y, self.varying_uv[2].y - self.varying_uv[0].y, 0.0);
+
+        let B = Mat3f::from_columns_vecs([
+            i.normalized(),
+            j.normalized(),
+            bn,
+        ]);
+
+        let n: Vec3f = (B * self.mesh.sample_normal(uv)).normalized();
+
+        let diff = f32::max(Vec3f::dot(n, self.light_dir), 0.0);
         let color = self.mesh.sample_diffuse(uv) * diff;
         Some(color)
     }
@@ -286,13 +293,14 @@ fn tangent_space_normal_mapping(image: &mut TgaImage, projection: Mat4f, model_v
     let mut mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
     let faces = mesh.faces.clone();
     mesh.load_diffuse_map("./assets/african_head/african_head_diffuse.tga")?;
-    mesh.load_normal_map("./assets/african_head/african_head_nm.tga")?;
+    mesh.load_normal_map("./assets/african_head/african_head_nm_tangent.tga")?;
     mesh.load_specular_map("./assets/african_head/african_head_spec.tga")?;
 
     let mut shader = TBNPhongShader {
         mesh,
-        varying_uv: [Vec2f::zero(); 3],
+        varying_uv : [Vec2f::zero(); 3],
         varying_nrm: Mat3f::identity(),
+        ndc_tri    : Mat3f::identity(),
         light_dir       : (projection * model_view).mul_direction(LIGHT_DIR).normalized(),
         uniform_m       : projection * model_view,
         uniform_mit     : (projection * model_view).inverted().transposed(),

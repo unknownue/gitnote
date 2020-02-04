@@ -133,6 +133,7 @@ impl ObjMesh {
         ).unwrap();
 
         // Why inverse the order????
+        // https://www.zhihu.com/question/23706933/answer/70432570
         Vec3f::new(
             (c[2] as f32 / 255.0) * 2.0 - 1.0,
             (c[1] as f32 / 255.0) * 2.0 - 1.0,
