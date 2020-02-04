@@ -12,6 +12,7 @@ pub type Vec2f = vek::Vec2<f32>;
 pub type Vec2i = vek::Vec2<i32>;
 pub type Vec3i = vek::Vec3<i32>;
 pub type Mat4f = vek::Mat4<f32>;
+pub type Mat3f = vek::Mat3<f32>;
 
 
 pub fn veci2f(v: Vec3i) -> Vec3f {

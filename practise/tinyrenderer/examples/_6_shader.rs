@@ -1,10 +1,10 @@
 
 use tinyrenderer::tga::{TgaImage, TgaFormat, TgaColor};
-use tinyrenderer::{Vec3f, Vec4f, Mat4f, Vec2f};
+use tinyrenderer::{Vec3f, Vec4f, Mat4f, Vec2f, Mat3f};
 use tinyrenderer::rasterization::ZbufferEx;
 use tinyrenderer::mesh::ObjMesh;
 use tinyrenderer::rasterization::triangle;
-use tinyrenderer::camera::{lookat, viewport, projection};
+use tinyrenderer::camera::{lookat, viewport, projection, sample_barycentric_uv};
 use tinyrenderer::shader::IShader;
 
 const OUTPUT_PATH: &'static str = "output.tga";
@@ -76,7 +76,7 @@ impl IShader for ToonShader {
 #[allow(unused)]
 fn ground_shading(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport: Mat4f, mut z_buffer: ZbufferEx) -> std::io::Result<()> {
 
-    let mesh = ObjMesh::load_mesh("./assets/diablo3_pose/diablo3_pose.obj")?;
+    let mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
     let faces = mesh.faces.clone();
 
     let mut shader = GroundShader { // or GroundShader
@@ -100,14 +100,14 @@ fn ground_shading(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, vi
 
 
 // --------------------------------------------------------------------------------------
-struct PhongShader {
+struct TextureShader {
     mesh: ObjMesh,
     varying_intensity: Vec3f,
     varying_uv: [Vec2f; 3],
     affine_transform: Mat4f,
 }
 
-impl IShader for PhongShader {
+impl IShader for TextureShader {
 
     fn vertex(&mut self, vertex_idx: usize, nthvert: usize) -> Vec4f {
         let vertex = &self.mesh.vertices[vertex_idx];
@@ -144,7 +144,7 @@ fn textures(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport
     let faces = mesh.faces.clone();
     mesh.load_diffuse_map("./assets/african_head/african_head_diffuse.tga")?;
 
-    let mut shader = PhongShader { // or GroundShader
+    let mut shader = TextureShader { // or GroundShader
         mesh,
         varying_intensity: Vec3f::zero(),
         varying_uv: [Vec2f::zero(); 3],
@@ -165,7 +165,7 @@ fn textures(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport
 
 
 // --------------------------------------------------------------------------------------
-struct SpecularShader {
+struct PhongShader {
     mesh: ObjMesh,
     varying_uv: [Vec2f; 3],
 
@@ -174,7 +174,7 @@ struct SpecularShader {
     affine_transform: Mat4f,
 }
 
-impl IShader for SpecularShader {
+impl IShader for PhongShader {
 
     fn vertex(&mut self, vertex_idx: usize, nthvert: usize) -> Vec4f {
         let vertex = &self.mesh.vertices[vertex_idx];
@@ -185,13 +185,6 @@ impl IShader for SpecularShader {
     }
 
     fn fragment(&self, barycentric: Vec3f) -> Option<TgaColor> {
-
-        fn sample_barycentric_uv(uvs: &[Vec2f; 3], bc: Vec3f) -> Vec2f {
-            Vec2f::new(
-                uvs[0].x * bc.x + uvs[1].x * bc.y + uvs[2].x * bc.z,
-                uvs[0].y * bc.x + uvs[1].y * bc.y + uvs[2].y * bc.z,
-            )
-        }
 
         let uv = sample_barycentric_uv(&self.varying_uv, barycentric);
         let n = (self.uniform_mit * Vec4f::from_point(self.mesh.sample_normal(uv))).normalized().xyz();
@@ -217,15 +210,90 @@ impl IShader for SpecularShader {
 #[allow(unused)]
 fn specular_mapping(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport: Mat4f, mut z_buffer: ZbufferEx) -> std::io::Result<()> {
 
-    let mut mesh = ObjMesh::load_mesh("./assets/diablo3_pose/diablo3_pose.obj")?;
+    let mut mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
     let faces = mesh.faces.clone();
-    mesh.load_diffuse_map("./assets/diablo3_pose/diablo3_pose_diffuse.tga")?;
-    mesh.load_normal_map("./assets/diablo3_pose/diablo3_pose_nm.tga")?;
-    mesh.load_specular_map("./assets/diablo3_pose/diablo3_pose_spec.tga")?;
+    mesh.load_diffuse_map("./assets/african_head/african_head_diffuse.tga")?;
+    mesh.load_normal_map("./assets/african_head/african_head_nm.tga")?;
+    mesh.load_specular_map("./assets/african_head/african_head_spec.tga")?;
 
-    let mut shader = SpecularShader {
+    let mut shader = PhongShader {
         mesh,
         varying_uv: [Vec2f::zero(); 3],
+        uniform_m       : projection * model_view,
+        uniform_mit     : (projection * model_view).inverted().transposed(),
+        affine_transform: viewport * projection * model_view,
+    };
+
+    for face in faces {
+        let screen_coords = [
+            shader.vertex(face[0], 0),
+            shader.vertex(face[1], 1),
+            shader.vertex(face[2], 2),
+        ];
+        triangle(image, &shader, &mut z_buffer, screen_coords);
+    }
+    Ok(())
+}
+// --------------------------------------------------------------------------------------
+
+
+// --------------------------------------------------------------------------------------
+struct TBNPhongShader {
+    mesh: ObjMesh,
+    varying_uv: [Vec2f; 3],
+    varying_nrm: Mat3f, // Store the normal of each vertex
+
+    light_dir: Vec3f,
+    uniform_m  : Mat4f, // Projection*ModelView
+    uniform_mit: Mat4f, // (Projection*ModelView).invert_transpose()
+    affine_transform: Mat4f,
+}
+
+impl IShader for TBNPhongShader {
+
+    fn vertex(&mut self, vertex_idx: usize, nthvert: usize) -> Vec4f {
+        let vertex = &self.mesh.vertices[vertex_idx];
+
+        fn mat3_set_column(m: &mut Mat3f, column_index: usize, v: Vec3f) {
+            m[(0, column_index)] = v.x;
+            m[(1, column_index)] = v.y;
+            m[(2, column_index)] = v.z;
+        }
+
+        // mul_direction is shortcut for Mat4 * Vec4::from_direction(normal)
+        mat3_set_column(&mut self.varying_nrm, nthvert, self.uniform_mit.mul_direction(vertex.normal));
+        self.varying_uv[nthvert]  = vertex.uv;
+
+        let gl_vertex = self.affine_transform * Vec4f::from_point(vertex.position);
+        gl_vertex
+    }
+
+    fn fragment(&self, barycentric: Vec3f) -> Option<TgaColor> {
+
+        let bn: Vec3f = (self.varying_nrm * barycentric).normalized();
+        let uv: Vec2f = sample_barycentric_uv(&self.varying_uv, barycentric);
+
+        let diff = f32::max(Vec3f::dot(bn, self.light_dir), 0.0);
+        let color = self.mesh.sample_diffuse(uv) * diff;
+        Some(color)
+    }
+}
+
+// https://github.com/ssloy/tinyrenderer/wiki/Lesson-6bis-tangent-space-normal-mapping
+#[allow(unused)]
+fn tangent_space_normal_mapping(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport: Mat4f, mut z_buffer: ZbufferEx) -> std::io::Result<()> {
+
+    let mut mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
+    let faces = mesh.faces.clone();
+    mesh.load_diffuse_map("./assets/african_head/african_head_diffuse.tga")?;
+    mesh.load_normal_map("./assets/african_head/african_head_nm.tga")?;
+    mesh.load_specular_map("./assets/african_head/african_head_spec.tga")?;
+
+    let mut shader = TBNPhongShader {
+        mesh,
+        varying_uv: [Vec2f::zero(); 3],
+        varying_nrm: Mat3f::identity(),
+        light_dir       : (projection * model_view).mul_direction(LIGHT_DIR).normalized(),
         uniform_m       : projection * model_view,
         uniform_mit     : (projection * model_view).inverted().transposed(),
         affine_transform: viewport * projection * model_view,
@@ -255,7 +323,8 @@ fn main() -> std::io::Result<()> {
 
     // ground_shading(&mut image, projection, model_view, view_port, z_buffer)?;
     // textures(&mut image, projection, model_view, view_port, z_buffer)?;
-    specular_mapping(&mut image, projection, model_view, view_port, z_buffer)?;
+    // specular_mapping(&mut image, projection, model_view, view_port, z_buffer)?;
+    tangent_space_normal_mapping(&mut image, projection, model_view, view_port, z_buffer)?;
 
     image.flip_vertically(); // place the origin in the bottom left corner of the image
     image.write_tga_file(OUTPUT_PATH, true)

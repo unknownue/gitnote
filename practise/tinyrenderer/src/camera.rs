@@ -1,5 +1,5 @@
 
-use crate::{Vec3f, Mat4f};
+use crate::{Vec3f, Vec2f, Mat4f};
 
 pub fn lookat(eye: Vec3f, center: Vec3f, up: Vec3f) -> Mat4f {
 
@@ -42,5 +42,13 @@ pub fn projection(coeff: f32) -> Mat4f {
         0.0, 1.0, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         0.0, 0.0, -1.0 / coeff, 1.0,
+    )
+}
+
+
+pub fn sample_barycentric_uv(uvs: &[Vec2f; 3], bc: Vec3f) -> Vec2f {
+    Vec2f::new(
+        uvs[0].x * bc.x + uvs[1].x * bc.y + uvs[2].x * bc.z,
+        uvs[0].y * bc.x + uvs[1].y * bc.y + uvs[2].y * bc.z,
     )
 }
