@@ -132,7 +132,7 @@ impl ObjMesh {
             (uv[1] * self.normal_map.height as f32) as i32,
         ).unwrap();
 
-        // Why inverse the order????
+        // Why inverse the order???? -> https://github.com/ssloy/tinyrenderer/issues/44
         // https://www.zhihu.com/question/23706933/answer/70432570
         Vec3f::new(
             (c[2] as f32 / 255.0) * 2.0 - 1.0,

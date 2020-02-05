@@ -185,7 +185,7 @@ impl IShader for PhongShader {
         let l = (self.uniform_m   * Vec4f::from_point(LIGHT_DIR)).normalized().xyz();
         let r = (2.0 * n * Vec3f::dot(n, l) - l).normalized(); // reflected light
 
-        // specular (here 6.0 is a magic number to adjust specular index)
+        // specular (here 10.0 is a magic number to adjust specular index)
         let specular = f32::max(r.z, 0.0).powf(self.mesh.sample_specular(uv) / 10.0);
         // diffuse
         let diffuse: TgaColor = self.mesh.sample_diffuse(uv);
@@ -239,8 +239,8 @@ struct TBNPhongShader {
     ndc_tri: Mat3f,         // triangle in normalized device coordinates
 
     light_dir: Vec3f,
-    uniform_m  : Mat4f, // Projection*ModelView
-    uniform_mit: Mat4f, // (Projection*ModelView).invert_transpose()
+    uniform_m  : Mat4f, // Projection * ModelView
+    uniform_mit: Mat4f, // (Projection * ModelView).invert_transpose()
     affine_transform: Mat4f,
 }
 
@@ -272,12 +272,14 @@ impl IShader for TBNPhongShader {
         let i: Vec3f = AI * Vec3f::new(self.varying_uv[1].x - self.varying_uv[0].x, self.varying_uv[2].x - self.varying_uv[0].x, 0.0);
         let j: Vec3f = AI * Vec3f::new(self.varying_uv[1].y - self.varying_uv[0].y, self.varying_uv[2].y - self.varying_uv[0].y, 0.0);
 
+        // Now B is composed by the basis of tangent space of current fragment in clip space
         let B = Mat3f::from_columns_vecs([
             i.normalized(),
             j.normalized(),
             bn,
         ]);
 
+        // transform the sample normal from normal map(tangent space) to clip space
         let n: Vec3f = (B * self.mesh.sample_normal(uv)).normalized();
 
         let diff = f32::max(Vec3f::dot(n, self.light_dir), 0.0);
@@ -326,8 +328,8 @@ fn main() -> std::io::Result<()> {
     let z_buffer = ZbufferEx { buffer: [std::f32::MIN; (WIDTH * WIDTH) as usize], width: WIDTH as usize };
 
     let model_view: vek::Mat4<f32> = lookat(EYE_POSITION, CENTER, UP);
-    let projection: vek::Mat4<f32> = projection((EYE_POSITION - CENTER).magnitude());
-    let view_port : vek::Mat4<f32> = viewport(WIDTH / 8, HEIGHT / 8, WIDTH as u32 * 3 / 4, HEIGHT as u32 * 3 / 4, 255);
+    let projection: vek::Mat4<f32> = projection(-1.0 / (EYE_POSITION - CENTER).magnitude());
+    let view_port : vek::Mat4<f32> = viewport(WIDTH / 8, HEIGHT / 8, WIDTH as u32 * 3 / 4, HEIGHT as u32 * 3 / 4, 255.0);
 
     // ground_shading(&mut image, projection, model_view, view_port, z_buffer)?;
     // textures(&mut image, projection, model_view, view_port, z_buffer)?;

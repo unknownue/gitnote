@@ -181,7 +181,6 @@ impl ZBuffer for ZbufferEx {
     fn set(&mut self, x: usize, y: usize, v: f32) { self.buffer[x + y * self.width] = v; }
 }
 
-
 fn barycentric(a: Vec3f, b: Vec3f, c: Vec3f, p: Vec2i) -> Vec3f {
 
     let v1 = Vec3f::new(c.x - a.x, b.x - a.x, a.x - p.x as f32);

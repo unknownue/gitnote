@@ -25,9 +25,9 @@ pub fn lookat(eye: Vec3f, center: Vec3f, up: Vec3f) -> Mat4f {
     minv * translation
 }
 
-pub fn viewport(x: i32, y: i32, w: u32, h: u32, depth: u32) -> Mat4f {
+pub fn viewport(x: i32, y: i32, w: u32, h: u32, depth: f32) -> Mat4f {
 
-    let (x, y, w, h, d) = (x as f32, y as f32, w as f32, h as f32, depth as f32);
+    let (x, y, w, h, d) = (x as f32, y as f32, w as f32, h as f32, depth);
     Mat4f::new(
         w / 2.0,     0.0,     0.0, x + w / 2.0,
             0.0, h / 2.0,     0.0, y + h / 2.0,
@@ -41,7 +41,7 @@ pub fn projection(coeff: f32) -> Mat4f {
         1.0, 0.0, 0.0, 0.0,
         0.0, 1.0, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, -1.0 / coeff, 1.0,
+        0.0, 0.0, coeff, 1.0,
     )
 }
 
