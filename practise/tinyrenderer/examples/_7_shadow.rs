@@ -4,7 +4,7 @@
 
 use tinyrenderer::tga::{TgaImage, TgaFormat, TgaColor};
 use tinyrenderer::{Vec3f, Vec4f, Mat4f, Vec2f, Mat3f};
-use tinyrenderer::rasterization::ZbufferEx;
+use tinyrenderer::rasterization::{ZbufferEx, ZBuffer};
 use tinyrenderer::mesh::ObjMesh;
 use tinyrenderer::rasterization::triangle;
 use tinyrenderer::camera::{lookat, viewport, projection, sample_barycentric_uv};
@@ -46,19 +46,20 @@ impl IShader for DepthShader {
     }
 }
 
-fn shadow_buffer() -> std::io::Result<(TgaImage, ShadowBuffer)> {
+fn render_shadow(shadow: &mut ShadowBuffer) -> std::io::Result<TgaImage> {
 
-    let model_view: vek::Mat4<f32> = lookat(LIGHT_DIR.normalized(), CENTER, UP);
-    let view_port : vek::Mat4<f32> = viewport(WIDTH / 8, HEIGHT / 8, WIDTH as u32 * 3 / 4, HEIGHT as u32 * 3 / 4, DEPTH);
+    let model_view: Mat4f = lookat(LIGHT_DIR.normalized(), CENTER, UP);
+    let projection: Mat4f = projection(0.0);
+    let view_port : Mat4f = viewport(WIDTH / 8, HEIGHT / 8, WIDTH as u32 * 3 / 4, HEIGHT as u32 * 3 / 4, DEPTH);
 
-    let mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
+    let mesh = ObjMesh::load_mesh("./assets/diablo3_pose/diablo3_pose.obj")?;
+    let faces = mesh.faces.clone();
     let mut depth_image = TgaImage::new(WIDTH, HEIGHT, TgaFormat::RGB);
-    let mut shadow_buffer = ShadowBuffer { buffer: [std::f32::MIN; (WIDTH * WIDTH) as usize], width: WIDTH as usize };
 
     let mut shader = DepthShader {
         mesh,
         varying_tri: Mat3f::identity(),
-        affine_transform: viewport * projection * model_view,
+        affine_transform: view_port * projection * model_view,
     };
 
     for face in faces {
@@ -67,9 +68,9 @@ fn shadow_buffer() -> std::io::Result<(TgaImage, ShadowBuffer)> {
             shader.vertex(face[1], 1),
             shader.vertex(face[2], 2),
         ];
-        triangle(&mut depth_image, &shader, &mut shadow_buffer, screen_coords);
+        triangle(&mut depth_image, &shader, shadow, screen_coords, DEPTH);
     }
-    Ok((depth_image, shadow_buffer))
+    Ok(depth_image)
 }
 // --------------------------------------------------------------------------------------
 
@@ -81,7 +82,6 @@ struct ShadowShader {
     varying_tri: Mat3f,     // triangle coordinates before Viewport transform, written by vertex shader, read by fragment shader
     varying_uv: [Vec2f; 3], // triangle uv coordinates, written by the vertex shader, read by the fragment shader
 
-    light_dir: Vec3f,
     uniform_m  : Mat4f,      // Projection * ModelView
     uniform_mit: Mat4f,      // (Projection * ModelView).invert_transpose()
     uniform_m_shadow: Mat4f, // transform framebuffer screen coordinates to shadowbuffer screen coordinates
@@ -100,9 +100,14 @@ impl IShader for ShadowShader {
     fn fragment(&self, barycentric: Vec3f) -> Option<TgaColor> {
 
         // corresponding point in the shadow buffer
-        let sb_p: Vec3f = self.uniform_m_shadow.mul_point(self.varying_tri * barycentric).homogenized().xyz();
+        let sb_p: Vec3f = (self.uniform_m_shadow * Vec4f::from_point(self.varying_tri * barycentric)).homogenized().xyz();
         // magic coeff to avoid z-fighting
-        let shadow: f32 = 0.3 + 0.7 * if shadow_buffer.get(sb_p.x, sb_p.y) < sb_p.z { 1.0 } else { 0.0 };
+//        let shadow = if self.shadow_buffer.get(sb_p.x as usize, sb_p.y as usize) < sb_p.z {
+//            0.3 + 0.7
+//        } else {
+//            0.3
+//        };
+        let shadow = 0.3;
 
         let uv = sample_barycentric_uv(&self.varying_uv, barycentric);
         let n = (self.uniform_mit * Vec4f::from_point(self.mesh.sample_normal(uv))).normalized().xyz(); // normal
@@ -120,7 +125,10 @@ impl IShader for ShadowShader {
     }
 }
 
-fn framebuffer(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport: Mat4f, mut z_buffer: ZbufferEx) -> std::io::Result<()> {
+fn framebuffer(shadow: ShadowBuffer) -> std::io::Result<TgaImage> {
+
+    let mut image = TgaImage::new(WIDTH, HEIGHT, TgaFormat::RGB);
+    let mut z_buffer = ZbufferEx { buffer: vec![std::f32::MIN; (WIDTH * WIDTH) as usize], width: WIDTH as usize };
 
     let model_view: vek::Mat4<f32> = lookat(EYE_POSITION, CENTER, UP);
     let view_port : vek::Mat4<f32> = viewport(WIDTH / 8, HEIGHT / 8, WIDTH as u32 * 3 / 4, HEIGHT as u32 * 3 / 4, DEPTH);
@@ -132,12 +140,16 @@ fn framebuffer(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewp
     mesh.load_normal_map("./assets/african_head/african_head_nm.tga")?;
     mesh.load_specular_map("./assets/african_head/african_head_spec.tga")?;
 
-    let mut shader = PhongShader {
+    let mut shader = ShadowShader {
         mesh,
+        shadow_buffer: shadow,
+        varying_tri: Mat3f::identity(),
         varying_uv: [Vec2f::zero(); 3],
+
         uniform_m       : projection * model_view,
         uniform_mit     : (projection * model_view).inverted().transposed(),
-        affine_transform: viewport * projection * model_view,
+        uniform_m_shadow: view_port * lookat(LIGHT_DIR.normalized(), CENTER, UP),
+        affine_transform: view_port * projection * model_view,
     };
 
     for face in faces {
@@ -146,21 +158,23 @@ fn framebuffer(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewp
             shader.vertex(face[1], 1),
             shader.vertex(face[2], 2),
         ];
-        triangle(image, &shader, &mut z_buffer, screen_coords);
+        triangle(&mut image, &shader, &mut z_buffer, screen_coords, DEPTH);
     }
-    Ok(())
+    Ok(image)
 }
 // --------------------------------------------------------------------------------------
 
-
 fn main() -> std::io::Result<()> {
 
-    let mut image = TgaImage::new(WIDTH, HEIGHT, TgaFormat::RGB);
-    let z_buffer = ZbufferEx { buffer: [std::f32::MIN; (WIDTH * WIDTH) as usize], width: WIDTH as usize };
-
     // rendering the shadow buffer
-    let (depth_image, shadow_buffer) = shadow_buffer(model_view, view_port, z_buffer)?;
+    let mut shadow = ShadowBuffer { buffer: vec![std::f32::MIN; (WIDTH * WIDTH) as usize], width: WIDTH as usize };
+    let mut depth_image = render_shadow(&mut shadow)?;
 
-    image.flip_vertically(); // place the origin in the bottom left corner of the image
+    let mut image = framebuffer(shadow)?;
+
+    depth_image.flip_vertically();
+    depth_image.write_tga_file("depth.tga", true)?;
+
+    image.flip_vertically();
     image.write_tga_file(OUTPUT_PATH, true)
 }

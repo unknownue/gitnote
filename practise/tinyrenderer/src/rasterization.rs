@@ -170,9 +170,8 @@ pub trait ZBuffer {
     fn get(&self, i: usize, j: usize) -> f32;
     fn set(&mut self, i: usize, j: usize, v: f32);
 }
-
 pub struct ZbufferEx {
-    pub buffer: [f32; 800 * 800],
+    pub buffer: Vec<f32>,
     pub width: usize,
 }
 
@@ -272,7 +271,7 @@ pub fn barycentric_rasterization_diffuse(image: &mut TgaImage, zbuffer: &mut imp
 }
 
 // barycentric rasterization
-pub fn triangle(image: &mut TgaImage, shader: &impl IShader, zbuffer: &mut impl ZBuffer, pts: [Vec4f; 3]) {
+pub fn triangle(image: &mut TgaImage, shader: &impl IShader, zbuffer: &mut impl ZBuffer, pts: [Vec4f; 3], max_depth: f32) {
 
     use std::f32::{MAX, MIN};
     let mut bounding_box_min: Vec2f = Vec2f::new(MAX, MAX);
@@ -299,7 +298,7 @@ pub fn triangle(image: &mut TgaImage, shader: &impl IShader, zbuffer: &mut impl 
         );
         let z: f32 = pts[0].z * bc.x + pts[1].z * bc.y + pts[2].z * bc.z;
         let w: f32 = pts[0].w * bc.x + pts[1].w * bc.y + pts[2].w * bc.z;
-        let fragment_depth = (z / w).max(0.0).min(255.0);
+        let fragment_depth = (z / w).max(0.0).min(max_depth);
 
         if bc.x < 0.0 || bc.y < 0.0 || bc.z < 0.0 || zbuffer.get(x as usize, y as usize) > fragment_depth {
             continue

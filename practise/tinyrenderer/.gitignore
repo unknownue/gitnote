@@ -16,6 +16,7 @@ Cargo.lock
 
 .DS_Store
 output.tga
+depth.tga
 .vscode/
 .idea/
 assets/

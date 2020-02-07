@@ -2,7 +2,7 @@
 tags: [Command Line, Linux]
 title: Linux Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-01-27T16:06:55.780Z'
+modified: '2020-02-06T16:40:26.903Z'
 ---
 
 # Linux Commands
@@ -37,6 +37,15 @@ $ 7z a archive.7z abc/
 ```shell
 # 7z x archive.7z
 $ 7z x archive.7z
+```
+
+## Mount
+```shell
+# mount source target
+$ mount /some/where/to/mount /mnt
+
+# unmount
+$ mount /mnt
 ```
 
 ## file content insert

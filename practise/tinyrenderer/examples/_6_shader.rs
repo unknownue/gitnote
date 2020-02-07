@@ -93,7 +93,7 @@ fn ground_shading(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, vi
             shader.vertex(face[2], 2),
         ];
 
-        triangle(image, &shader, &mut z_buffer, screen_coords);
+        triangle(image, &shader, &mut z_buffer, screen_coords, 255.0);
     }
     Ok(())
 }
@@ -151,7 +151,7 @@ fn textures(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, viewport
             shader.vertex(face[1], 1),
             shader.vertex(face[2], 2),
         ];
-        triangle(image, &shader, &mut z_buffer, screen_coords);
+        triangle(image, &shader, &mut z_buffer, screen_coords, 255.0);
     }
     Ok(())
 }
@@ -224,7 +224,7 @@ fn specular_mapping(image: &mut TgaImage, projection: Mat4f, model_view: Mat4f, 
             shader.vertex(face[1], 1),
             shader.vertex(face[2], 2),
         ];
-        triangle(image, &shader, &mut z_buffer, screen_coords);
+        triangle(image, &shader, &mut z_buffer, screen_coords, 255.0);
     }
     Ok(())
 }
@@ -315,7 +315,7 @@ fn tangent_space_normal_mapping(image: &mut TgaImage, projection: Mat4f, model_v
             shader.vertex(face[1], 1),
             shader.vertex(face[2], 2),
         ];
-        triangle(image, &shader, &mut z_buffer, screen_coords);
+        triangle(image, &shader, &mut z_buffer, screen_coords, 255.0);
     }
     Ok(())
 }
@@ -325,7 +325,7 @@ fn tangent_space_normal_mapping(image: &mut TgaImage, projection: Mat4f, model_v
 fn main() -> std::io::Result<()> {
 
     let mut image = TgaImage::new(WIDTH, HEIGHT, TgaFormat::RGB);
-    let z_buffer = ZbufferEx { buffer: [std::f32::MIN; (WIDTH * WIDTH) as usize], width: WIDTH as usize };
+    let z_buffer = ZbufferEx { buffer: vec![std::f32::MIN; (WIDTH * WIDTH) as usize], width: WIDTH as usize };
 
     let model_view: vek::Mat4<f32> = lookat(EYE_POSITION, CENTER, UP);
     let projection: vek::Mat4<f32> = projection(-1.0 / (EYE_POSITION - CENTER).magnitude());
