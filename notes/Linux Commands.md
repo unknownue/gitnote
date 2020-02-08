@@ -2,7 +2,7 @@
 tags: [Command Line, Linux]
 title: Linux Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-02-06T16:40:26.903Z'
+modified: '2020-02-08T09:16:58.881Z'
 ---
 
 # Linux Commands
@@ -10,6 +10,11 @@ modified: '2020-02-06T16:40:26.903Z'
 ## Query the number of threads of processor
 ```shell
 $ nproc
+```
+
+## Check port
+```shell
+$ ss -lntpd | grep :22
 ```
 
 ## View process status
