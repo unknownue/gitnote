@@ -2,7 +2,7 @@
 tags: [Linux]
 title: Arch Linux Setup
 created: '2020-02-06T18:15:10.214Z'
-modified: '2020-02-08T14:04:04.470Z'
+modified: '2020-02-09T08:57:31.740Z'
 ---
 
 # Arch Linux Setup
@@ -25,6 +25,13 @@ $ pacman -Syu
 $ pacman -S man base-devel git
 # Display system info
 $ pacman -S neofetch
+
+# Import archlinuxcn source
+# https://mirror.tuna.tsinghua.edu.cn/help/archlinuxcn/
+$ nvim /etc/pacman.conf
+$ pacman -Syy
+$ pacman -S archlinuxcn-keyring
+$ pacman -Sy
 ```
 
 ## User
@@ -71,7 +78,33 @@ $ pacman -S sddm sddm-kcm
 $ systemctl enable sddm
 $ systemctl enable NetworkManager
 
-# Use NVIDIA driver for GUI(optional)
+# Now the desktop is available
+$ systemctl start sddm
+```
+
+### Global Menu
+1. Desktop right click > Add panel > Application Menu Bar
+2. Install widget
+```shell
+$ pacman -S plasma5-applets-active-window-control
+```
+3.Add this widget to left side of global menu
+4.open its setting, and choose `Hide titlebar for maximized windows`
+
+
+## Graphics
+See also http://tieba.baidu.com/p/6340530678?red_tag=p3174950699
+### INTEL driver
+```shell
+# Install dirver for intel
+$ pacman -S xf86-video-intel
+```
+
+### NVIDIA
+```shell
+# Install dirver for nvidia
+$ pacman -S nvidia
+
 # Install NVIDIA driver first
 # Get GPU address
 $ lspci | grep -E "VGA|3D"
@@ -80,6 +113,34 @@ $ nvim /usr/share/sddm/scripts/Xsetup
 # Config xorg.conf
 $ nvim /etc/X11/xorg.conf
 (nvim) $ # Add as follows
+# After /etc/X11/xorg.conf has been set
+$ nvidia-xconfig
+
+$ nvim /etc/mkinitcpio.conf
+(nvim) $ # as follows
+$ mkinitcpio -p linux
+$ nvim /etc/default/grub
+(nvim) $ # as follows
+$ grub-mkconfig > /boot/grub/grub.cfg
+
+# Try load nvidia driver(optional)
+$ modprobe nvidia nvidia_uvm nvidia_drm nvidia_modeset
+# If failed uninstall all nvidia driver and try others
+
+# Check if nvidia dirver is running
+$ lsmod | grep nvidia
+$ nvidia-smi -q
+```
+
+/etc/mkinitcpio.conf
+```
+MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)
+```
+
+/etc/default/grub
+```
+GRUB_CMDLINE_LINUX_DEFAULT="quiet"
+GRUB_CMDLINE_LINUX="nvidia-drm.modeset=1"
 ```
 
 /usr/share/sddm/scripts/Xsetup
@@ -104,54 +165,6 @@ Section "Device"
 EndSection
 ```
 
-### Global Menu
-1. Desktop right click > Add panel > Application Menu Bar
-2. Install widget
-```shell
-$ pacman -S plasma5-applets-active-window-control
-```
-3.Add this widget to left side of global menu
-4.open its setting, and choose `Hide titlebar for maximized windows`
-
-
-## Graphics
-### INTEL driver
-```shell
-# Install dirver for intel
-$ pacman -S xf86-video-intel
-```
-
-### NVIDIA
-```shell
-# Install dirver for nvidia
-$ pacman -S nvidia nvidia-libgl
-# After /etc/X11/xorg.conf has been set
-$ nvidia-xconfig
-
-# Try load nvidia driver
-$ modprobe nvidia nvidia_uvm nvidia_drm nvidia_modeset
-# If failed uninstall all nvidia driver and try others
-
-$ nvim /etc/mkinitcpio.conf
-(nvim) $ # as follows
-$ nvim /etc/default/grub
-(nvim) $ # as follows
-$ grub-mkconfig > /boot/grub/grub.cfg
-
-# Check if nvidia dirver is running
-$ lsmod | grep nvidia
-$ nvidia-smi -q
-```
-
-/etc/mkinitcpio.conf
-```
-MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)
-```
-
-/etc/default/grub
-```
-GRUB_CMDLINE_LINUX_DEFAULT="quiet nvidia-drm.modeset=1"
-```
 
 ### Graphics switcher
 ```shell
@@ -226,6 +239,7 @@ $ tlp-stat
 ```
 
 ## SSH
+### OpenSSH
 ```shell
 $ pacman -S openssh
 # Start on system launch
@@ -242,6 +256,27 @@ $ nvim /etc/ssh/sshd_config
 # Modify default port
 $ nvim /etc/ssh/sshd_config
 # Set port by add line `Port 12596`
+```
+
+### Mac Remote Develement
+```shell
+(archlinux) $ nvim /etc/ssh/sshd_config
+(nvim) $ # as follows
+(mac) $ nvim /private/etc/ssh/ssh_config
+(nvim) $ # ForwardX11 yes
+(mac) $ ssh -X root@192.168.0.x
+(mac) $ export LIBGL_ALWAYS_INDIRECT=1
+```
+
+(archlinux) /etc/ssh/sshd_config
+```
+X11Forwarding yes
+X11DisplayOffset 10
+```
+
+(mac) /private/etc/ssh/ssh_config
+```
+ForwardX11 yes
 ```
 
 ## Shadowsocks
@@ -313,7 +348,7 @@ $ sudo gpasswd -a $USER docker
 $ newgrp docker
 ```
 
-# Vulkan
+
 
 ## Trojan
 See also https://wiki.archlinux.org/index.php/Trojan

@@ -2,7 +2,7 @@
 tags: [Command Line, Docker]
 title: Docker Note
 created: '2020-01-19T06:53:51.825Z'
-modified: '2020-02-03T08:38:02.313Z'
+modified: '2020-02-09T10:29:34.224Z'
 ---
 
 # Docker Note
@@ -30,6 +30,11 @@ docker image prune -a
 Open new interative terminal in running container
 ```
 docker exec -it running_container_name bash
+```
+
+View log
+```shell
+docker logs --follow container_name
 ```
 
 Run jupyter notebook
