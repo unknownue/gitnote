@@ -2,7 +2,7 @@
 tags: [Docker]
 title: Run Docker GUI on macOS
 created: '2020-01-17T02:25:41.235Z'
-modified: '2020-01-19T01:54:44.267Z'
+modified: '2020-02-10T15:07:41.269Z'
 ---
 
 # Run Docker GUI on macOS
@@ -43,4 +43,21 @@ docker run -e DISPLAY=host.docker.internal:0 -it --rm --name s3t  getting2vinod/
 ```
 
 这里我们运行的是 Studio 3T 这款程序，如果更换成其他程序，请记得留下 -e DISPLAY=host.docker.internal:0。其中，host.docker.internal 是 docker 容器内访问宿主使用的 IP，对于 Docker for Mac 和 Docker for Windows 均有效。
+
+## 运行在远程服务器上的docker中的GUI程序
+```shell
+(local) $ 
+(local) $ ssh -X root@192.168.0.104
+
+(ssh) $ docker run \
+    -it --rm \
+    -e DISPLAY=192.168.0.102:0 \
+    --net=host \
+    --volume where/to/mount:/root/dev \
+    --volume ~/.Xauthority:/root/.Xauthority:rw \
+    -w /root/dev \
+    --gpus all
+    --name container_name
+    image_name
+```
 
