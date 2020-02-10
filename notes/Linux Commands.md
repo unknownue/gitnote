@@ -2,7 +2,7 @@
 tags: [Command Line, Linux]
 title: Linux Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-02-08T09:16:58.881Z'
+modified: '2020-02-10T08:46:17.808Z'
 ---
 
 # Linux Commands
@@ -53,7 +53,7 @@ $ mount /some/where/to/mount /mnt
 $ mount /mnt
 ```
 
-## file content insert
+## Sed
 insert the content of file1 to file2 at line 10
 ```shell
 sed -i '10r path/to/file1' path/to/file2
@@ -63,3 +63,9 @@ insert the content of file1 to the end of file2
 ```shell
 cat path/to/file1 >> path/to/file2
 ```
+
+Replace characters from ORIGIN_STRING to NEW_STRING for FILE
+```shell
+$ sed 's/ORIGIN_STRING/NEW_STRING/' FILE
+```
+
