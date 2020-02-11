@@ -2,7 +2,7 @@
 tags: [Docker]
 title: Run Docker GUI on macOS
 created: '2020-01-17T02:25:41.235Z'
-modified: '2020-02-10T15:07:41.269Z'
+modified: '2020-02-11T11:32:18.214Z'
 ---
 
 # Run Docker GUI on macOS
@@ -46,7 +46,7 @@ docker run -e DISPLAY=host.docker.internal:0 -it --rm --name s3t  getting2vinod/
 
 ## 运行在远程服务器上的docker中的GUI程序
 ```shell
-(local) $ 
+(local) $ socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
 (local) $ ssh -X root@192.168.0.104
 
 (ssh) $ docker run \
@@ -54,7 +54,7 @@ docker run -e DISPLAY=host.docker.internal:0 -it --rm --name s3t  getting2vinod/
     -e DISPLAY=192.168.0.102:0 \
     --net=host \
     --volume where/to/mount:/root/dev \
-    --volume ~/.Xauthority:/root/.Xauthority:rw \
+    --volume $XAUTHORITY:/root/.Xauthority:rw \
     -w /root/dev \
     --gpus all
     --name container_name

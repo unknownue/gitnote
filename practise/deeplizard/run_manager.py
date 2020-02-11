@@ -27,7 +27,7 @@ class RunManager:
         self.loader  = None
         self.tensorboard = None
 
-    def begin_run(self, run, loader: torch.utils.data.DataLoader, network: torch.nn.Module):
+    def begin_run(self, run, network: torch.nn.Module, loader: torch.utils.data.DataLoader):
         
         self.run_start_time = time.time()
 

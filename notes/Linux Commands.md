@@ -2,10 +2,15 @@
 tags: [Command Line, Linux]
 title: Linux Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-02-10T08:46:17.808Z'
+modified: '2020-02-11T02:55:11.895Z'
 ---
 
 # Linux Commands
+
+## Show file sizf
+```shell
+$ ls -hl
+```
 
 ## Query the number of threads of processor
 ```shell
@@ -25,6 +30,8 @@ $ top
 ## Download
 ```shell
 $ wget https://resource.url -O target_path
+# Download with username and password
+$ wget https://resource.url -O target_path --http-user=user --http-passwd=passwd
 ```
 
 ## Chmod
