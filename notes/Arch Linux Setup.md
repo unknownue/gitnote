@@ -2,7 +2,7 @@
 tags: [Linux]
 title: Arch Linux Setup
 created: '2020-02-06T18:15:10.214Z'
-modified: '2020-02-09T08:57:31.740Z'
+modified: '2020-02-13T00:58:26.323Z'
 ---
 
 # Arch Linux Setup
@@ -94,13 +94,13 @@ $ pacman -S plasma5-applets-active-window-control
 
 ## Graphics
 See also http://tieba.baidu.com/p/6340530678?red_tag=p3174950699
-### INTEL driver
+### INTEL Driver
 ```shell
 # Install dirver for intel
 $ pacman -S xf86-video-intel
 ```
 
-### NVIDIA
+### NVIDIA Driver
 ```shell
 # Install dirver for nvidia
 $ pacman -S nvidia

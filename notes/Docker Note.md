@@ -2,7 +2,7 @@
 tags: [Command Line, Docker]
 title: Docker Note
 created: '2020-01-19T06:53:51.825Z'
-modified: '2020-02-09T10:29:34.224Z'
+modified: '2020-02-13T12:43:16.862Z'
 ---
 
 # Docker Note
@@ -22,7 +22,7 @@ Remove all images without tags
 docker images|grep none|awk '{print $3}'|xargs docker rmi
 ```
 
-Remove all unsed images
+Remove all unsed images(danger operation)
 ```shell
 docker image prune -a
 ```

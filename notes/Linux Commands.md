@@ -2,10 +2,20 @@
 tags: [Command Line, Linux]
 title: Linux Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-02-11T02:55:11.895Z'
+modified: '2020-02-12T15:55:37.991Z'
 ---
 
 # Linux Commands
+
+## Echo
+```shell
+# output something to std
+$ echo "Hello world"
+# Rewrite the file content(if not exist, create it)
+$ echo "**FILE CONTENT**" > target.txt
+# Append content to the end of file
+$ echo "**ADDITIONAL CONTENT**" >> target.txt
+```
 
 ## Show file sizf
 ```shell
