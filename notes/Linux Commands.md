@@ -2,7 +2,7 @@
 tags: [Command Line, Linux]
 title: Linux Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-02-12T15:55:37.991Z'
+modified: '2020-02-14T08:32:33.539Z'
 ---
 
 # Linux Commands
@@ -59,6 +59,11 @@ $ 7z a archive.7z abc/
 ```shell
 # 7z x archive.7z
 $ 7z x archive.7z
+```
+
+Search local network device
+```shell
+$ nmap -sP 192.168.1.0/24
 ```
 
 ## Mount
