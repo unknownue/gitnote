@@ -1,7 +1,8 @@
 ---
+tags: [macOS]
 title: Mac Notes
 created: '2020-02-10T13:57:35.284Z'
-modified: '2020-02-10T15:01:41.634Z'
+modified: '2020-02-16T01:52:10.292Z'
 ---
 
 # Mac Notes

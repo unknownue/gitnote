@@ -134,11 +134,11 @@ fn framebuffer(shadow: ShadowBuffer) -> std::io::Result<TgaImage> {
     let view_port : vek::Mat4<f32> = viewport(WIDTH / 8, HEIGHT / 8, WIDTH as u32 * 3 / 4, HEIGHT as u32 * 3 / 4, DEPTH);
     let projection: vek::Mat4<f32> = projection(-1.0 / (EYE_POSITION - CENTER).magnitude());
 
-    let mut mesh = ObjMesh::load_mesh("./assets/african_head/african_head.obj")?;
+    let mut mesh = ObjMesh::load_mesh("./assets/diablo3_pose/diablo3_pose.obj")?;
     let faces = mesh.faces.clone();
-    mesh.load_diffuse_map("./assets/african_head/african_head_diffuse.tga")?;
-    mesh.load_normal_map("./assets/african_head/african_head_nm.tga")?;
-    mesh.load_specular_map("./assets/african_head/african_head_spec.tga")?;
+    mesh.load_diffuse_map("./assets/diablo3_pose/diablo3_pose_diffuse.tga")?;
+    mesh.load_normal_map("./assets/diablo3_pose/diablo3_pose_nm.tga")?;
+    mesh.load_specular_map("./assets/diablo3_pose/diablo3_posed_spec.tga")?;
 
     let mut shader = ShadowShader {
         mesh,
@@ -168,8 +168,8 @@ fn main() -> std::io::Result<()> {
 
     // rendering the shadow buffer
     let mut shadow = ShadowBuffer { buffer: vec![std::f32::MIN; (WIDTH * WIDTH) as usize], width: WIDTH as usize };
-    let mut depth_image = render_shadow(&mut shadow)?;
 
+    let mut depth_image = render_shadow(&mut shadow)?;
     let mut image = framebuffer(shadow)?;
 
     depth_image.flip_vertically();
