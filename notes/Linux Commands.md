@@ -2,7 +2,7 @@
 tags: [Command Line, Linux]
 title: Linux Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-02-16T07:54:21.095Z'
+modified: '2020-02-17T13:37:10.978Z'
 ---
 
 # Linux Commands
@@ -17,9 +17,14 @@ $ echo "**FILE CONTENT**" > target.txt
 $ echo "**ADDITIONAL CONTENT**" >> target.txt
 ```
 
-## Show file sizf
+## View disk usage
 ```shell
+# Show file size of current directory
 $ ls -hl
+# Show disk usage
+$ df -hl
+# Show the file and directroy size of current folder
+$ du -hl --max-depth=1
 ```
 
 ## Query the number of threads of processor

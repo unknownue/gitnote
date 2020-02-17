@@ -2,7 +2,7 @@
 tags: [Linux]
 title: Arch Linux Setup
 created: '2020-02-06T18:15:10.214Z'
-modified: '2020-02-13T00:58:26.323Z'
+modified: '2020-02-17T13:40:27.667Z'
 ---
 
 # Arch Linux Setup
@@ -80,6 +80,13 @@ $ systemctl enable NetworkManager
 
 # Now the desktop is available
 $ systemctl start sddm
+```
+
+### Disable baloo(For file searching)
+See also https://wiki.archlinux.org/index.php/Baloo
+```shell
+$ balooctl suspend
+$ balooctl disable
 ```
 
 ### Global Menu
