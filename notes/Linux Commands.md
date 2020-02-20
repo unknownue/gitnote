@@ -2,7 +2,7 @@
 tags: [Command Line, Linux]
 title: Linux Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-02-17T13:37:10.978Z'
+modified: '2020-02-20T07:14:56.418Z'
 ---
 
 # Linux Commands
@@ -25,6 +25,12 @@ $ ls -hl
 $ df -hl
 # Show the file and directroy size of current folder
 $ du -hl --max-depth=1
+```
+
+## Search
+```shell
+# Search current directory
+$ grep -rn "hello,world!" ./
 ```
 
 ## Query the number of threads of processor
@@ -88,16 +94,28 @@ $ mount /mnt
 ## Sed
 insert the content of file1 to file2 at line 10
 ```shell
-sed -i '10r path/to/file1' path/to/file2
+$ sed -i '10r path/to/file1' path/to/file2
 ```
 
 insert the content of file1 to the end of file2
 ```shell
-cat path/to/file1 >> path/to/file2
+$ cat path/to/file1 >> path/to/file2
 ```
 
 Replace characters from ORIGIN_STRING to NEW_STRING for FILE
 ```shell
 $ sed 's/ORIGIN_STRING/NEW_STRING/' FILE
+```
+
+## Path
+```shell
+# Convert a path to an absolute path without symlinks
+$ realpath some/path
+
+# Return the directory name of given path
+$ dirname some/path
+
+# Delete the path prefix and trailing extension of given path
+$ basename some/path
 ```
 

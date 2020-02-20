@@ -2,7 +2,7 @@
 tags: [Command Line, Docker]
 title: Docker Note
 created: '2020-01-19T06:53:51.825Z'
-modified: '2020-02-14T02:14:28.395Z'
+modified: '2020-02-20T02:11:58.404Z'
 ---
 
 # Docker Note
@@ -20,6 +20,11 @@ docker rm $(docker ps -a |grep Exited |awk '{print $1}')
 Remove all images without tags
 ```shell
 docker images|grep none|awk '{print $3}'|xargs docker rmi
+```
+
+Launch a containr without internet access
+```shell
+$ docker run --net none -it alpine /bin/sh
 ```
 
 Remove all unsed images(danger operation)
