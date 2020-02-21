@@ -2,7 +2,7 @@
 tags: [Command Line, Linux]
 title: Linux Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-02-20T07:14:56.418Z'
+modified: '2020-02-21T10:32:11.987Z'
 ---
 
 # Linux Commands
@@ -104,7 +104,7 @@ $ cat path/to/file1 >> path/to/file2
 
 Replace characters from ORIGIN_STRING to NEW_STRING for FILE
 ```shell
-$ sed 's/ORIGIN_STRING/NEW_STRING/' FILE
+$ sed -i 's/ORIGIN_STRING/NEW_STRING/' FILE
 ```
 
 ## Path

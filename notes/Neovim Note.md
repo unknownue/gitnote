@@ -2,12 +2,27 @@
 tags: [Vim]
 title: Neovim Note
 created: '2020-01-22T13:55:41.399Z'
-modified: '2020-02-01T05:37:56.496Z'
+modified: '2020-02-21T08:12:47.137Z'
 ---
 
 # Neovim Note
 
-```vim
+Save a file with admin
+```vimscript
+:w !sudo tee %<CR>
+```
+
+Print to html
+```vimscript
+:%TOhtml<CR>
+```
+
+Inscrease number
+```vimscript
+<C-a>
+```
+
+```vimscript
 # Open file
 :e file.h
 # open a file in horizontal
@@ -16,7 +31,7 @@ modified: '2020-02-01T05:37:56.496Z'
 :vsp filename 
 ```
 
-```vim
+```vimscript
 # Split window for the same file
 :sp
 # Close current window
@@ -25,7 +40,7 @@ modified: '2020-02-01T05:37:56.496Z'
 :only
 ```
 
-```vim
+```vimscript
 " Next buffer in buffer list
 :bn
 " Previous buffer in buffer list
@@ -34,7 +49,7 @@ modified: '2020-02-01T05:37:56.496Z'
 :bd
 ```
 
-```vim
+```vimscript
 # Jump between window
 <C-w>j  -> move to bottom
 <C-w>k  -> move to up
