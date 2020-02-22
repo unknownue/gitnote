@@ -2,7 +2,7 @@
 tags: [macOS]
 title: Mac Notes
 created: '2020-02-10T13:57:35.284Z'
-modified: '2020-02-16T01:52:10.292Z'
+modified: '2020-02-21T16:09:59.612Z'
 ---
 
 # Mac Notes
@@ -23,3 +23,11 @@ $ kill -9 PORT
 ```shell
 $ export HOMEBREW_NO_AUTO_UPDATE=true
 ```
+
+## Context Menu
+```shell
+# Set the number of items required to create the Services submenu
+# Here 999 is just an example
+$ write -g NSServicesMinimumItemCountForContextSubmenu -int 999
+```
+

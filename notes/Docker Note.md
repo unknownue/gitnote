@@ -2,7 +2,7 @@
 tags: [Command Line, Docker]
 title: Docker Note
 created: '2020-01-19T06:53:51.825Z'
-modified: '2020-02-21T02:54:04.701Z'
+modified: '2020-02-21T17:33:28.059Z'
 ---
 
 # Docker Note
@@ -12,13 +12,16 @@ Show all exit container
 docker ps -a |grep Exited |awk '{print $1}'
 ```
 
-Remove all exit container
+Clean image and container
 ```shell
-docker rm $(docker ps -a |grep Exited |awk '{print $1}')
-```
+# Remove all exit container
+$ docker rm $(docker ps -a |grep Exited |awk '{print $1}')
 
-Remove all images without tags
+# Remove all images without tags
+$ docker images|grep none|awk '{print $3}'|xargs docker rmi
+```
 ```shell
+docker rm $(docker ps -a |grep Exited |awk '{print $1}') && \
 docker images|grep none|awk '{print $3}'|xargs docker rmi
 ```
 
