@@ -1,11 +1,11 @@
 ---
 tags: [Command Line]
-title: Aria2 Download
+title: 'Command: aria2'
 created: '2019-12-27T12:01:31.634Z'
-modified: '2019-12-27T12:13:11.018Z'
+modified: '2020-02-22T15:53:09.946Z'
 ---
 
-# Aria2 Download
+# Command: aria2
 
 ```shell
 # Example: aria2c --ftp-user=username --ftp-passwd=password sftp://remote_ip:port/path/to/target/file

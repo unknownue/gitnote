@@ -1,11 +1,11 @@
 ---
 tags: [Command Line]
-title: Tar Note
+title: 'Command: tar'
 created: '2020-01-18T10:58:58.314Z'
-modified: '2020-01-19T01:55:07.086Z'
+modified: '2020-02-22T15:53:24.565Z'
 ---
 
-# Tar Note
+# Command: tar
 
 tar
 解包：tar xvf FileName.tar

@@ -1,8 +1,8 @@
 ---
-tags: [Command Line, Docker]
+tags: [Docker]
 title: Docker Note
 created: '2020-01-19T06:53:51.825Z'
-modified: '2020-02-21T17:33:28.059Z'
+modified: '2020-02-22T15:52:53.753Z'
 ---
 
 # Docker Note

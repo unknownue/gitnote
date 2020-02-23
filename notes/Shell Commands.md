@@ -1,11 +1,11 @@
 ---
 tags: [Command Line, Linux]
-title: Linux Commands
+title: Shell Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-02-21T10:32:11.987Z'
+modified: '2020-02-23T09:43:50.063Z'
 ---
 
-# Linux Commands
+# Shell Commands
 
 ## Echo
 ```shell
@@ -15,6 +15,8 @@ $ echo "Hello world"
 $ echo "**FILE CONTENT**" > target.txt
 # Append content to the end of file
 $ echo "**ADDITIONAL CONTENT**" >> target.txt
+# Output to stderr
+$ >&2 echo "Here is stderr"
 ```
 
 ## View disk usage
@@ -48,9 +50,16 @@ $ cat /proc/cpuinfo
 $ ss -lntpd | grep :22
 ```
 
-## View process status
+## Query process status
 ```shell
+# View all proess realtime status
 $ top
+# query process by NAME
+$ ps -ef | grep -m1 NAME
+# Get process ID
+$ ps -ef | grep -m1 socat | awk '{ print $2 }'
+# Kill process
+$ kill -9 PROCESS_ID
 ```
 
 ## Download
@@ -117,5 +126,13 @@ $ dirname some/path
 
 # Delete the path prefix and trailing extension of given path
 $ basename some/path
+```
+
+## Get IP address
+```shell
+# IPV4
+$ ip -4 address show | grep inet | grep -v 127.0.0 | awk '{print $2}' | cut -d'/' -f1
+# IPV6
+$ ip -6 address show | grep inet6 | awk '{print $2}' | cut -d'/' -f1
 ```
 

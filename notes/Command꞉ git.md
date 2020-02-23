@@ -1,11 +1,11 @@
 ---
 tags: [Command Line]
-title: Git Note
+title: 'Command: git'
 created: '2020-01-27T16:05:00.692Z'
-modified: '2020-02-20T09:19:15.993Z'
+modified: '2020-02-22T15:53:37.111Z'
 ---
 
-# Git Note
+# Command: git
 
 Revert last commit in local
 ```shell
