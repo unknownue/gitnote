@@ -2,7 +2,7 @@
 tags: [Command Line, Linux]
 title: Shell Commands
 created: '2020-01-18T12:18:31.628Z'
-modified: '2020-02-23T09:43:50.063Z'
+modified: '2020-02-26T10:15:13.862Z'
 ---
 
 # Shell Commands
@@ -45,15 +45,13 @@ $ nproc
 $ cat /proc/cpuinfo
 ```
 
-## Check port
-```shell
-$ ss -lntpd | grep :22
-```
-
 ## Query process status
 ```shell
 # View all proess realtime status
 $ top
+# query process by port
+$ ss -lntpd | grep :22  # Linux
+$ lsof -i TCP:6000      # macOS
 # query process by NAME
 $ ps -ef | grep -m1 NAME
 # Get process ID

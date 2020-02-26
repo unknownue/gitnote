@@ -47,6 +47,8 @@ modified: '2020-02-01T01:14:55.187Z'
 | [pixels](https://github.com/parasyte/pixels)         | A tiny hardware-accelerated pixel frame buffer.              |
 | [euc](https://github.com/zesterer/euc)               | A software rendering crate that lets you write shaders with Rust. |
 
+See also https://stevenlr.com/posts/handmade-rust-4-vulkan-bindings/
+
 
 
 ## Window
@@ -142,6 +144,7 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [microprofile-rust](https://github.com/jonasmr/microprofile-rust) | A profiler for profiling and optimizing multithreaded game code. |
 | [flame](https://github.com/TyOverby/flame)                   | A cool flamegraph library for rust.                          |
+| [superluminal-perf-rs](https://github.com/EmbarkStudios/superluminal-perf-rs) | Superluminal Performance profiler Rust API for adding user events to captures. |
 
 
 
