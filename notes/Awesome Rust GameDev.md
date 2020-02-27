@@ -81,6 +81,7 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 | [iced](https://github.com/hecrj/iced)                     | No          | A renderer-agnostic GUI library for Rust focused on simplicity and type-safety. |
 | [imgui-rs](https://github.com/Gekkio/imgui-rs)            | Yes         | Rust bindings for dear imgui.                                |
 | [imgui-inspect](https://github.com/aclysma/imgui-inspect) | Yes         | An inspector UI using imgui in Rust.                         |
+| [kas](https://github.com/dhardy/kas)                      | No          | KAS is a general-purpose GUI toolkit.                        |
 
 
 
