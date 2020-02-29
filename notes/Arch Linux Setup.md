@@ -2,7 +2,7 @@
 tags: [Linux]
 title: Arch Linux Setup
 created: '2020-02-06T18:15:10.214Z'
-modified: '2020-02-17T13:40:27.667Z'
+modified: '2020-02-29T07:45:54.471Z'
 ---
 
 # Arch Linux Setup
@@ -43,6 +43,12 @@ $ visudo
 (visudo) $ # Uncomment line "%wheel ALL=(ALL) ALL"
 ```
 
+## TRIM
+```shell
+# Enable TRIM support on SSD
+$ systemctl enable fstrim.timer
+```
+
 ## Shutdown system
 ```shell
 $ shutdown -h now
@@ -74,6 +80,8 @@ $ pacman -S plasma-meta kde-applications-meta
 $ pacman -S networkmanager net-tools
 # Login display
 $ pacman -S sddm sddm-kcm
+# Delete all package about xfce4
+$ pacman -Rcs xfce4
 
 $ systemctl enable sddm
 $ systemctl enable NetworkManager

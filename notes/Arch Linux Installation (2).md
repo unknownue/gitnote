@@ -1,11 +1,11 @@
 ---
 tags: [Linux]
-title: Arch linux Installation
+title: Arch Linux Installation
 created: '2020-02-07T15:56:13.440Z'
-modified: '2020-02-08T13:50:18.424Z'
+modified: '2020-02-29T07:06:47.227Z'
 ---
 
-# Arch linux Installation
+# Arch Linux Installation
 
 # Prepare
 ```shell
@@ -103,7 +103,7 @@ $ genfstab -U /mnt >> /mnt/etc/fstab
 ## Configure system
 ```shell
 # Jump to installed system
-(u-disk) $ arch-chroot
+(u-disk) $ arch-chroot /mnt
 # Config timezone
 (archlinux) $ ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 (archlinux) $ hwclock --systohc
