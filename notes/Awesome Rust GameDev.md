@@ -141,11 +141,11 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 
 ## Performance
 
-| Library                                                      | Description                                                  |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [microprofile-rust](https://github.com/jonasmr/microprofile-rust) | A profiler for profiling and optimizing multithreaded game code. |
-| [flame](https://github.com/TyOverby/flame)                   | A cool flamegraph library for rust.                          |
-| [superluminal-perf-rs](https://github.com/EmbarkStudios/superluminal-perf-rs) | Superluminal Performance profiler Rust API for adding user events to captures. |
+| Library                                                      | Description                                                  | Website                      |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------- |
+| [microprofile-rust](https://github.com/jonasmr/microprofile-rust) | A profiler for profiling and optimizing multithreaded game code. |                              |
+| [flame](https://github.com/TyOverby/flame)                   | A cool flamegraph library for rust.                          |                              |
+| [superluminal-perf-rs](https://github.com/EmbarkStudios/superluminal-perf-rs) | Superluminal Performance profiler Rust API for adding user events to captures. | https://superluminal.eu/rust |
 
 
 
