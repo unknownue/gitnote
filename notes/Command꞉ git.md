@@ -2,7 +2,7 @@
 tags: [Command Line]
 title: 'Command: git'
 created: '2020-01-27T16:05:00.692Z'
-modified: '2020-02-22T15:53:37.111Z'
+modified: '2020-03-02T01:38:37.687Z'
 ---
 
 # Command: git
@@ -22,3 +22,10 @@ $ git checkout tags/<tag_name>
 $ git checkout tags/<tag_name> -b <branch_name>
 ```
 
+Modify history commit message
+```shell
+$ git rebase -i HEAD~5
+(git) # Modify pick to edir
+$ git commit --amend
+$ git rebase --continue
+```

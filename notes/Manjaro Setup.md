@@ -2,7 +2,7 @@
 tags: [Linux]
 title: Manjaro Setup
 created: '2020-02-29T12:48:44.874Z'
-modified: '2020-03-01T08:10:52.735Z'
+modified: '2020-03-02T02:49:02.023Z'
 ---
 
 # Manjaro Setup
@@ -21,3 +21,11 @@ $ nvim /etc/pacman.conf # Remove "#[multilib]" segment
 
 ## Switch between GUI and TTY
 Just try from `Ctrl + Alt + F1` to `Ctrl + Alt + F12`
+
+## RDP Server
+See also https://wiki.archlinux.org/index.php/Xrdp
+```shell
+$ yay install xrdp
+$ systemctl enable xrdp.service
+$ systemctl enable xrdp-sesman.service
+```

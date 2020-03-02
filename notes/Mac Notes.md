@@ -2,7 +2,7 @@
 tags: [macOS]
 title: Mac Notes
 created: '2020-02-10T13:57:35.284Z'
-modified: '2020-02-21T16:09:59.612Z'
+modified: '2020-03-02T07:56:54.475Z'
 ---
 
 # Mac Notes
@@ -31,3 +31,7 @@ $ export HOMEBREW_NO_AUTO_UPDATE=true
 $ write -g NSServicesMinimumItemCountForContextSubmenu -int 999
 ```
 
+## Temporarily disable homebrew update
+```shell
+$ export HOMEBREW_NO_AUTO_UPDATE=true
+```
