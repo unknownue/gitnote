@@ -2,7 +2,7 @@
 tags: [Linux]
 title: Manjaro Setup
 created: '2020-02-29T12:48:44.874Z'
-modified: '2020-03-02T02:49:02.023Z'
+modified: '2020-03-03T03:19:40.124Z'
 ---
 
 # Manjaro Setup
@@ -25,7 +25,10 @@ Just try from `Ctrl + Alt + F1` to `Ctrl + Alt + F12`
 ## RDP Server
 See also https://wiki.archlinux.org/index.php/Xrdp
 ```shell
-$ yay install xrdp
-$ systemctl enable xrdp.service
-$ systemctl enable xrdp-sesman.service
+$ yay install xrdpxorg
+$ sudo systemctl enable xrdp.service
+$ sudo systemctl enable xrdp-sesman.service
+
+$ sudo systemctl start xrdp.service
+$ sudo systemctl start xrdp-sesman.service
 ```
