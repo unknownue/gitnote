@@ -2,10 +2,15 @@
 tags: [Docker]
 title: Docker Note
 created: '2020-01-19T06:53:51.825Z'
-modified: '2020-02-22T15:52:53.753Z'
+modified: '2020-03-04T07:07:52.242Z'
 ---
 
 # Docker Note
+
+Install Docker
+```shell
+$ curl -sSL https://get.docker.com/ | sh
+```
 
 Show all exit container
 ```shell
@@ -42,6 +47,11 @@ RUN --mount=target=/export,type=bind,source=export \
 Remove all unsed images(danger operation)
 ```shell
 docker image prune -a
+```
+
+Download large image to file
+```shell
+$ curl https://raw.githubusercontent.com/moby/moby/master/contrib/download-frozen-image-v2.sh | 
 ```
 
 Clean volume
