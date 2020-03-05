@@ -1,4 +1,4 @@
-# Docker Note
+# Docker
 
 Install Docker
 ```bash
