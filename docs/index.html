@@ -7,19 +7,77 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta charset="UTF-8">
   <link rel="stylesheet" href="docsify/themes/vue.css">
+  <link rel="stylesheet" href="docsify/themes/dark-mode.css">
 </head>
 <body>
   <div id="app">Documentation are rendering...</div>
   <script>
     window.$docsify = {
       homepage: 'home.md',
+      name: "unknownue",
+      nameLink: '/',
+      themeColor: '#3F51B5',
+      autoHeader: false,
       relativePath: true,
       loadSidebar: true,
+      auto2top: true,
+      logo: 'docsify/icon.svg',
+      maxLevel: 4,
       subMaxLevel: 2,
+      notFoundPage: true,
+      formatUpdated: '{MM}/{DD} {HH}:{mm}',
+      repo: 'https://github.com/unknownue/gitnote/',
+      
+      pagination: {
+        previousText: 'Next chapter',
+        nextText: 'Previous chapter',
+        crossChapter: true,
+        crossChapterText: true
+      },
+
+      search: {
+        maxAge: 86400000, // one day
+        paths: 'auto', // or 'auto'
+        placeholder: 'Type to search',
+        noData: 'No Results!',
+        // Search range. 1-6
+        depth: 2
+      },
+
+      darkMode: {
+        dark: {
+          background: "#1c2022",
+          toggleBtnBg: "#34495e",
+          textColor: "#b4b4b4"
+        },
+        light: {
+          background: "white",
+          toggleBtnBg: "var(--theme-color)",
+          textColor: "var(--theme-color)"
+        }
+      },
+
+      plugins: [
+        function (hook) {
+          var footer = [
+            '<hr/>',
+            '<footer>',
+            '<span><a href="https://github.com/unknownue">unknownue</a> &copy;2019-2020.</span>',
+            '</footer>'
+          ].join('')
+
+          hook.afterEach(function (html) {
+            return html + footer
+          })
+        }
+      ]
     }
   </script>
-  <script src="docsify/lib/copy-code.js"></script>
   <script src="docsify/lib/docsify.min.js"></script>
+  <script src="docsify/lib/pagination.min.js"></script>
+  <script src="docsify/lib/copy-code.js"></script>
+  <script src="docsify/lib/dark-index.js"></script>
+
   <script src="docsify/prismjs/prism-bash.js"></script>
   <script src="docsify/prismjs/prism-python.js"></script>
   <script src="docsify/prismjs/prism-cpp.js"></script>

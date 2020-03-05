@@ -1,4 +1,5 @@
 docs/* linguist-documentation=false
+docs/docsify/* linguist-documentation=true
 practise/* linguist-documentation=false
 
 *.md linguist-detectable=true
