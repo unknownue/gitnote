@@ -1,10 +1,3 @@
----
-tags: [Learning, Rendering]
-title: Road to Computer Graphics
-created: '2020-01-09T08:56:43.113Z'
-modified: '2020-02-20T13:06:53.543Z'
----
-
 # Road to Computer Graphics
 
 Soft renderer

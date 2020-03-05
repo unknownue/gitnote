@@ -1,14 +1,7 @@
----
-tags: [Linux]
-title: Arch Linux Installation
-created: '2020-02-07T15:56:13.440Z'
-modified: '2020-02-29T07:06:47.227Z'
----
-
 # Arch Linux Installation
 
 # Prepare
-```shell
+```bash
 # Downdown install iso from https://archlinux.org/download/.
 # Boot this iso from the computer to install.
 # vertify signature
@@ -16,7 +9,7 @@ $ pacman-key -v archlinux-version-x86_64.iso.sig
 ```
 
 # Installation setup
-```shell
+```bash
 # Set keyboard layout
 $ loadkeys colemak
 # Set console font
@@ -39,7 +32,7 @@ $ timedatectl set-ntp true
 ```
 
 ## Allocate storage
-```shell
+```bash
 # check if motherboard support UEFI
 $ ls /sys/firmware/efi/efivars
 $ efivar -l
@@ -87,7 +80,7 @@ $ swapon /dev/sda2
 ```
 
 ## Install system
-```shell
+```bash
 # Modify software source
 $ vim /etc/pacman.d/mirrorlist
 (vim) # Cut the source to the file top
@@ -101,7 +94,7 @@ $ genfstab -U /mnt >> /mnt/etc/fstab
 ```
 
 ## Configure system
-```shell
+```bash
 # Jump to installed system
 (u-disk) $ arch-chroot /mnt
 # Config timezone

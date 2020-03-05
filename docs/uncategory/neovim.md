@@ -1,10 +1,3 @@
----
-tags: [Vim]
-title: Neovim Note
-created: '2020-01-22T13:55:41.399Z'
-modified: '2020-02-21T08:12:47.137Z'
----
-
 # Neovim Note
 
 Save a file with admin

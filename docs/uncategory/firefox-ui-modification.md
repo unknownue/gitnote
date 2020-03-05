@@ -1,10 +1,3 @@
----
-tags: [Firefox]
-title: Firefox UI Modification
-created: '2020-01-09T08:49:04.060Z'
-modified: '2020-01-15T08:58:27.388Z'
----
-
 # Firefox UI Modification
 
 Unlock custom CSS usage in Firefox 69 and newer

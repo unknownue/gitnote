@@ -1,10 +1,3 @@
----
-tags: [ABI, Rust]
-title: 'Rust 中的 bin, lib, rlib, a, so 概念介绍'
-created: '2020-01-16T06:15:23.772Z'
-modified: '2020-01-16T06:22:07.695Z'
----
-
 # Concept of bin, lib, rlib, a and so in Rust
 
 From https://rust.cc/article?id=98b96e69-7a5f-4bba-a38e-35bdd7a0a7dd
@@ -15,13 +8,13 @@ From https://rust.cc/article?id=98b96e69-7a5f-4bba-a38e-35bdd7a0a7dd
 
 我们创建一个新工程，通常从下面两句入手：
 
-```shell
+```bash
 cargo new foobar
 ```
 
 或
 
-```shell
+```bash
 cargo new --lib foobar
 ```
 
@@ -37,13 +30,13 @@ cargo new --lib foobar
 
 执行
 
-```shell
+```bash
 rustc --help|grep crate-type
 ```
 
 可得到如下输出
 
-```shell
+```bash
        --crate-type [bin|lib|rlib|dylib|cdylib|staticlib|proc-macro]
 ```
 
@@ -65,7 +58,7 @@ rlib 是 Rust Library 特定静态中间库格式。如果只是纯 Rust 代码�
 
 rlib 实现为一个 ar 归档文件。
 
-```shell
+```bash
 > file target/debug/libfoobar.rlib
 target/debug/libfoobar.rlib: current ar archive
 ```

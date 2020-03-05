@@ -1,14 +1,7 @@
----
-tags: [Linux]
-title: Manjaro Setup
-created: '2020-02-29T12:48:44.874Z'
-modified: '2020-03-03T03:19:40.124Z'
----
-
 # Manjaro Setup
 
 ## Common configuration
-```shell
+```bash
 # Update mirror list
 $ pacman-mirrors -i -c China -m rank
 $ Server = http://mirrors.163.com/archlinux/$repo/os/$arch
@@ -24,7 +17,7 @@ Just try from `Ctrl + Alt + F1` to `Ctrl + Alt + F12`
 
 ## RDP Server
 See also https://wiki.archlinux.org/index.php/Xrdp
-```shell
+```bash
 $ yay install xrdpxorg
 $ sudo systemctl enable xrdp.service
 $ sudo systemctl enable xrdp-sesman.service

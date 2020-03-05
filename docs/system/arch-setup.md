@@ -1,14 +1,7 @@
----
-tags: [Linux]
-title: Arch Linux Setup
-created: '2020-02-06T18:15:10.214Z'
-modified: '2020-02-29T07:45:54.471Z'
----
-
 # Arch Linux Setup
 
 ## Color
-```shell
+```bash
 # Add color to pacman
 $ nvim /etc/pacman.conf
 (nvim) $ # Uncomment the line with `Color`
@@ -18,7 +11,7 @@ $ alias ls="ls --color"
 ```
 
 ## Install basic package
-```shell
+```bash
 # Upgrade system
 $ pacman -Syu
 # Install package
@@ -35,7 +28,7 @@ $ pacman -Sy
 ```
 
 ## User
-```shell
+```bash
 $ useradd -m -G wheel unknownue
 $ passwd unknownue
 $ ln -s /usr/bin/nvim /usr/bin/vi
@@ -44,18 +37,18 @@ $ visudo
 ```
 
 ## TRIM
-```shell
+```bash
 # Enable TRIM support on SSD
 $ systemctl enable fstrim.timer
 ```
 
 ## Shutdown system
-```shell
+```bash
 $ shutdown -h now
 ```
 
 ## Connect to network(by eth0)
-```shell
+```bash
 # find some way to install dhcpcd
 $ pacman -S dhcpcd 
 
@@ -72,7 +65,7 @@ ping google.com
 
 # GUI
 https://wiki.archlinux.org/index.php/KDE
-```shell
+```bash
 $ pacman -S xorg xorg-server
 
 # For KDE
@@ -92,7 +85,7 @@ $ systemctl start sddm
 
 ### Disable baloo(For file searching)
 See also https://wiki.archlinux.org/index.php/Baloo
-```shell
+```bash
 $ balooctl suspend
 $ balooctl disable
 ```
@@ -100,7 +93,7 @@ $ balooctl disable
 ### Global Menu
 1. Desktop right click > Add panel > Application Menu Bar
 2. Install widget
-```shell
+```bash
 $ pacman -S plasma5-applets-active-window-control
 ```
 3.Add this widget to left side of global menu
@@ -110,13 +103,13 @@ $ pacman -S plasma5-applets-active-window-control
 ## Graphics
 See also http://tieba.baidu.com/p/6340530678?red_tag=p3174950699
 ### INTEL Driver
-```shell
+```bash
 # Install dirver for intel
 $ pacman -S xf86-video-intel
 ```
 
 ### NVIDIA Driver
-```shell
+```bash
 # Install dirver for nvidia
 $ pacman -S nvidia
 
@@ -159,7 +152,7 @@ GRUB_CMDLINE_LINUX="nvidia-drm.modeset=1"
 ```
 
 /usr/share/sddm/scripts/Xsetup
-```shell
+```bash
 #!/bin/sh
 # Xsetup - run as root before the login dialog appear
 xrandr --setprovideroutputsource modesetting NVIDIA-0
@@ -182,7 +175,7 @@ EndSection
 
 
 ### Graphics switcher
-```shell
+```bash
 # See which GPU is working now
 $ lspci | grep VGA
 
@@ -214,13 +207,13 @@ PMMethod=bbswitch
 
 ### cuDNN
 See https://developer.nvidia.com/cuda-gpus
-```shell
+```bash
 $ pacman -S cuda cudnn
 $ reboot
 ```
 
 ## Other Drivers
-```shell
+```bash
 # Audio
 $ pacman -S alsa-utils pulseaudio pulseaudio-alsa
 
@@ -255,7 +248,7 @@ $ tlp-stat
 
 ## SSH
 ### OpenSSH
-```shell
+```bash
 $ pacman -S openssh
 # Start on system launch
 $ systemctl enable sshd
@@ -274,7 +267,7 @@ $ nvim /etc/ssh/sshd_config
 ```
 
 ### Mac Remote Develement
-```shell
+```bash
 (archlinux) $ nvim /etc/ssh/sshd_config
 (nvim) $ # as follows
 (mac) $ nvim /private/etc/ssh/ssh_config
@@ -295,7 +288,7 @@ ForwardX11 yes
 ```
 
 ## Shadowsocks
-```shell
+```bash
 $ pacman -S shadowsocks-libev
 $ mkdir /etc/shadowsocks
 $ nvim /etc/shadowsocks/config.json
@@ -337,7 +330,7 @@ $ ss-local -c /etc/shadowsocks/config.json
 ```
 
 ## BBR
-```shell
+```bash
 # the kernel version must be >= 4.9
 $ uname -r
 # Check if bbr module exist
@@ -353,7 +346,7 @@ $ lsmod | grep bbr
 ```
 
 ## Docker
-```shell
+```bash
 $ pacman -S --noconfirm docker docker-compose
 $ systemctl enable docker
 $ systemctl start docker
@@ -367,7 +360,7 @@ $ newgrp docker
 
 ## Trojan
 See also https://wiki.archlinux.org/index.php/Trojan
-```shell
+```bash
 $ pacman -S --noconfirm trojan
 # Config as https://github.com/Acris/docker-shadowsocks-libev
 ```

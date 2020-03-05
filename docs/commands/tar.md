@@ -1,10 +1,3 @@
----
-tags: [Command Line]
-title: tar
-created: '2020-01-18T10:58:58.314Z'
-modified: '2020-03-05T01:34:27.628Z'
----
-
 # tar
 
 tar

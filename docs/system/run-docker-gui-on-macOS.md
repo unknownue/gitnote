@@ -1,10 +1,3 @@
----
-tags: [Docker, macOS]
-title: Run Docker GUI on macOS
-created: '2020-01-17T02:25:41.235Z'
-modified: '2020-02-16T01:52:01.810Z'
----
-
 # Run Docker GUI on macOS
 
 From https://dev.tail0r.com/running-docker-gui-app-on-mac/
@@ -13,7 +6,7 @@ From https://dev.tail0r.com/running-docker-gui-app-on-mac/
 
 首先我们先安装两个东西：
 
-```shell
+```bash
 brew install socat
 brew cask install xquartz
 ```
@@ -26,7 +19,7 @@ brew cask install xquartz
 
 重新登录之后，我们打开命令行（Terminal），运行如下命令启动 socat 监听 6000 端口：
 
-```shell
+```bash
 socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
 ```
 
@@ -38,14 +31,14 @@ socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
 
 一切就绪，现在我们运行程序：
 
-```shell
+```bash
 docker run -e DISPLAY=host.docker.internal:0 -it --rm --name s3t  getting2vinod/studio3t:latest /opt/studio3t/Studio-3T
 ```
 
 这里我们运行的是 Studio 3T 这款程序，如果更换成其他程序，请记得留下 -e DISPLAY=host.docker.internal:0。其中，host.docker.internal 是 docker 容器内访问宿主使用的 IP，对于 Docker for Mac 和 Docker for Windows 均有效。
 
 ## 运行在远程服务器上的docker中的GUI程序
-```shell
+```bash
 (local) $ socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
 (local) $ ssh -X root@192.168.0.104
 

@@ -1,10 +1,3 @@
----
-tags: [Configuration]
-title: Karabiner Customized
-created: '2020-01-15T14:19:15.323Z'
-modified: '2020-01-18T13:24:07.797Z'
----
-
 # Karabiner Customized
 
 In `~/.config/karabiner/assets/complex_modifications/karabiner-programming.json`

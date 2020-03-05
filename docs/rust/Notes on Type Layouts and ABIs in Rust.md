@@ -1,10 +1,3 @@
----
-tags: ['2019', ABI, Memory, Rust]
-title: Notes on Type Layouts and ABIs in Rust
-created: '2019-12-27T12:08:21.671Z'
-modified: '2019-12-27T12:10:31.538Z'
----
-
 # Notes on Type Layouts and ABIs in Rust
 
 ### Alexis Beingessner

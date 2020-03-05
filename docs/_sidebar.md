@@ -1,4 +1,5 @@
 - [Home](/)
+
 - [Commands](commands)
     - [common](/commands/commands.md)
     - [docker](/commands/docker.md)
@@ -9,21 +10,26 @@
     - [tar](/commands/tar.md)
     - [ssh](/commands/ssh.md)
     - [tmux](/commands/tmux.md)
+
 - [System](system)
     - [Archlinux Installation](/system/arch-installation.md)
     - [Archlinux Setup](/system/arch-setup.md)
     - [Manjaro Setup](/system/manjaro-setup.md)
     - [macOS](/system/macOS.md)
+
 - [Python](python)
-    - [Python](/python/numpy.md)
+    - [Python](/python/python.md)
     - [Numpy](/python/numpy.md)
     - [PyTorch](/python/pytorch.md)
+
 - [Rust](rust)
     - [GameDev](/rust/gamedev.md)
     - [Blogs](/rust/blogs.md)
+
 - [Graphics](graphics)
     - [Algorithm](/graphics/algorithm.md)
-    - [Rode](/graphics/roadmap.md)
+    - [Roadmap](/graphics/roadmap.md)
+
 - [Uncategory](uncategory)
     - [SSD Benchmark](/uncategory/ssd-benchmark.md)
     - [Firefox UI](/uncategory/firefox-ui-modification.md)

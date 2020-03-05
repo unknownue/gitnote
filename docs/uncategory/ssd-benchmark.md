@@ -1,17 +1,10 @@
----
-tags: [Benchmark]
-title: SSD Benchmark
-created: '2020-02-29T15:11:09.742Z'
-modified: '2020-02-29T15:17:51.904Z'
----
-
 # SSD Benchmark
 
 This benchmark is the same design with CrystalDiskMark
 
 Before run the following. Install [fio](https://github.com/axboe/fio) first.
 
-```shell
+```bash
 #!/bin/bash
 #############################################################################################################
 #Changelog                                                                                                  #

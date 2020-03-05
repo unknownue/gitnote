@@ -1,10 +1,3 @@
----
-tags: [Rendering, Rust]
-title: Awesome Rust GameDev
-created: '2020-01-30T12:30:39.680Z'
-modified: '2020-02-01T01:14:55.187Z'
----
-
 # Awesome Rust GameDev
 
 [![Awesome](https://awesome.re/badge-flat2.svg)](https://awesome.re)

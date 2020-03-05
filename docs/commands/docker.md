@@ -1,41 +1,35 @@
----
-tags: [Docker]
-title: Docker Note
-created: '2020-01-19T06:53:51.825Z'
-modified: '2020-03-04T07:07:52.242Z'
----
-
 # Docker Note
 
 Install Docker
-```shell
+```bash
 $ curl -sSL https://get.docker.com/ | sh
 ```
 
 Show all exit container
-```shell
+```bash
 docker ps -a |grep Exited |awk '{print $1}'
 ```
 
 Clean image and container
-```shell
+```bash
 # Remove all exit container
 $ docker rm $(docker ps -a |grep Exited |awk '{print $1}')
 
 # Remove all images without tags
 $ docker images|grep none|awk '{print $3}'|xargs docker rmi
 ```
-```shell
+```bash
 docker rm $(docker ps -a |grep Exited |awk '{print $1}') && \
 docker images|grep none|awk '{print $3}'|xargs docker rmi
 ```
 
 Launch a containr without internet access
-```shell
+```bash
 $ docker run --net none -it alpine /bin/sh
 ```
 
 Mount a read-only directory in `Dockerfile`
+
 See also https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md
 ```Dockerfile
 # syntax=docker/dockerfile:experimental
@@ -45,17 +39,17 @@ RUN --mount=target=/export,type=bind,source=export \
 ```
 
 Remove all unsed images(danger operation)
-```shell
+```bash
 docker image prune -a
 ```
 
 Download large image to file
-```shell
+```bash
 $ curl https://raw.githubusercontent.com/moby/moby/master/contrib/download-frozen-image-v2.sh | 
 ```
 
 Clean volume
-```shell
+```bash
 $ docker system prune --volume
 ```
 
@@ -65,12 +59,12 @@ docker exec -it running_container_name bash
 ```
 
 View log
-```shell
+```bash
 $ docker logs --follow container_name
 ```
 
 Run jupyter notebook
-```shell
+```bash
 # Launch container
 $ docker run --rm -it -p 8888:8888 -v (pwd):/root/dev/ docker_image_name
 
@@ -79,7 +73,7 @@ $ jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
 ```
 
 Run tensorboard
-```shell
+```bash
 # Launch container
 $ docker run --rm -it -p 6006:6006 -v (pwd):/root/dev/ docker_image_name
 

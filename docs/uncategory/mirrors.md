@@ -1,13 +1,7 @@
----
-title: Mirrors
-created: '2020-03-04T12:09:31.768Z'
-modified: '2020-03-04T12:11:34.188Z'
----
-
 # Mirrors
 
 Get system version
-```shell
+```bash
 $ cat /etc/issue 
 ```
 

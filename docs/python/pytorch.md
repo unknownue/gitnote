@@ -1,28 +1,21 @@
----
-tags: [Python]
-title: PyTorch Note
-created: '2020-01-28T08:17:20.703Z'
-modified: '2020-01-30T13:45:42.484Z'
----
-
 # PyTorch Note
 
-```Python
+```python
 import torch
 ```
 
 ### tensor constructor
-```Python
+```python
 # Construct tensor by copy in default data type(torch.float32)
 torch.Tensor(data)
 ```
 
-```Python
+```python
 # Construct tensor by copy(data type is inferred by input)
 torch.tensor(data)
 ```
 
-```Python
+```python
 # Construct tensor by reference
 torch.as_tensor()
 torch.from_numpy()

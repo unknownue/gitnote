@@ -1,19 +1,13 @@
----
-title: Linux Authority
-created: '2020-03-01T02:11:51.348Z'
-modified: '2020-03-01T02:16:27.802Z'
----
-
 # Linux Authority
 
 ## Check file authority
-```shell
+```bash
 $ ls -hl
 ```
 
 ## Set file authority
-```shell
-$chmod AUTHORITY_NUMBER FILE
+```bash
+$ chmod AUTHORITY_NUMBER FILE
 ```
 
 - r 读权限read  4
@@ -30,7 +24,7 @@ $chmod AUTHORITY_NUMBER FILE
 Linux档案的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。
 
 ### Examples
-```shell
+```bash
 # Apply full authority to FILE
 $ chmod 777 FILE
 # Apply read + write authority to FILE owner

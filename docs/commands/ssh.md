@@ -1,10 +1,3 @@
----
-tags: [Command Line]
-title: SSH
-created: '2020-03-01T01:53:43.858Z'
-modified: '2020-03-05T01:55:22.689Z'
----
-
 # SSH
 
 SSH login without password
@@ -15,7 +8,7 @@ ssh 无密码登录要使用公钥与私钥。linux下可以用用`ssh-keygen`�
 有机器A(192.168.1.155)，B(192.168.1.181)。现想A通过ssh免密码登录到B。
 
 1.在A机下生成公钥/私钥对。
-```shell
+```bash
 [chenlb@A ~]$ ssh-keygen -t rsa -P ''
 ```
 
@@ -24,7 +17,7 @@ ssh 无密码登录要使用公钥与私钥。linux下可以用用`ssh-keygen`�
 它在`/home/chenlb`下生成`.ssh`目录，`.ssh`下有`id_rsa`和`id_rsa.pub`。
 
 2.把A机下的id_rsa.pub复制到B机下，在B机的`.ssh/authorized_keys`文件里，我用`scp`复制。（如果B机器没有`.ssh`和`authorized_keys`文件则创建这个文件夹和文件先）
-```shell
+```bash
 [chenlb@A ~]$ scp .ssh/id_rsa.pub chenlb@192.168.1.181:/home/chenlb/id_rsa.pub 
 chenlb@192.168.1.181's password:
 id_rsa.pub                                    100%  223     0.2KB/s   00:00
@@ -33,7 +26,7 @@ id_rsa.pub                                    100%  223     0.2KB/s   00:00
 由于还没有免密码登录的，所以要输入密码。
 
 3.B机把从A机复制的`id_rsa.pub`添加到`.ssh/authorzied_keys`文件里。
-```shell
+```bash
 [chenlb@B ~]$ cat id_rsa.pub >> .ssh/authorized_keys
 [chenlb@B ~]$ chmod 600 .ssh/authorized_keys
 ```
@@ -41,7 +34,7 @@ id_rsa.pub                                    100%  223     0.2KB/s   00:00
 `authorized_keys`的权限要是600。
 
 4.A机登录B机。
-```shell
+```bash
 [chenlb@A ~]$ ssh 192.168.1.181
 The authenticity of host '192.168.1.181 (192.168.1.181)' can't be established.
 RSA key fingerprint is 00:a6:a8:87:eb:c7:40:10:39:cc:a0:eb:50:d9:6a:5b.

@@ -1,10 +1,3 @@
----
-tags: [Rust]
-title: Different between associate type and generic type
-created: '2019-12-27T12:13:30.314Z'
-modified: '2019-12-27T12:14:13.420Z'
----
-
 # Different between associate type and generic type
 
 > from https://rust.cc/article?id=1a2e348e-a4d0-4ee1-9368-353730f2e212
