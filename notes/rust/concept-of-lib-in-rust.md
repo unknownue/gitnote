@@ -5,7 +5,7 @@ created: '2020-01-16T06:15:23.772Z'
 modified: '2020-01-16T06:22:07.695Z'
 ---
 
-# Rust 中的 bin, lib, rlib, a, so 概念介绍
+# Concept of bin, lib, rlib, a and so in Rust
 
 From https://rust.cc/article?id=98b96e69-7a5f-4bba-a38e-35bdd7a0a7dd
 

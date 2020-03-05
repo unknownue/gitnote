@@ -1,10 +1,11 @@
 ---
-title: 'Command: ln'
+tags: [Command Line]
+title: ln
 created: '2020-03-04T02:10:29.537Z'
-modified: '2020-03-04T02:44:02.467Z'
+modified: '2020-03-05T01:54:59.579Z'
 ---
 
-# Command: ln
+# ln
 
 ## **Absolute path must be use!**
 

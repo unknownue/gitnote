@@ -1,11 +1,11 @@
 ---
 tags: [Command Line]
-title: 'Command: tmux'
+title: tmux
 created: '2020-01-19T01:47:17.532Z'
-modified: '2020-02-22T15:53:47.782Z'
+modified: '2020-03-05T01:34:19.777Z'
 ---
 
-# Command: tmux
+# tmux
 
 Personal keymapping for tmux
 

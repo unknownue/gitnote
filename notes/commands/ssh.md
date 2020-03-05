@@ -1,11 +1,13 @@
 ---
-title: SSH login without password
+tags: [Command Line]
+title: SSH
 created: '2020-03-01T01:53:43.858Z'
-modified: '2020-03-01T01:58:32.096Z'
+modified: '2020-03-05T01:55:22.689Z'
 ---
 
-# SSH login without password
+# SSH
 
+SSH login without password
 From https://www.cnblogs.com/tudachui/p/10671970.html
 
 ssh 无密码登录要使用公钥与私钥。linux下可以用用`ssh-keygen`生成公钥/私钥对，下面我以CentOS为例。
@@ -57,4 +59,3 @@ Last login: Thu Jul  3 09:53:18 2008 from chenlb
 小结：登录的机子可有私钥，被登录的机子要有登录机子的公钥。这个公钥/私钥对一般在私钥宿主机产生。上面是用rsa算法的公钥/私钥对，当然也可以用dsa(对应的文件是`id_dsa`，`id_dsa.pub`)
 
 想让A，B机无密码互登录，那B机以上面同样的方式配置即可。
-

@@ -15,4 +15,3 @@ Ray Tracing
 
 ## Thanks
 [Reference vo01github](https://github.com/vo01github/ComputerGraphics)
-
