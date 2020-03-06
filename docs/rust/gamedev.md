@@ -11,7 +11,7 @@
 - [GUI](#GUI)
 - [ECS](#ECS)
 - [Engine](#Engine)
-- [Texture](#Texture)
+- [Texture/Font](#Texture/Font)
 - [Design](#Design)
 - [Network](#Network)
 - [Performance](#Performance)
@@ -105,11 +105,12 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 
 
 
-## Texture
+## Texture/Font
 
 | Library                                                      | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [texture-synthesis](https://github.com/EmbarkStudios/texture-synthesis) | A light Rust API for *Multiresolution Stochastic Texture Synthesis*. |
+| [Fontdue](https://github.com/mooman219/fontdue)              | A simple no_std font parser and rasterizer.                  |
 
 
 
@@ -124,9 +125,10 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 
 ## Network
 
-| Library                              | Description                                                  | Websize              |
-| ------------------------------------ | ------------------------------------------------------------ | -------------------- |
-| [Ruma](https://github.com/ruma/ruma) | Ruma is a Matrix homeserver, client, and supporting libraries written in Rust. | https://www.ruma.io/ |
+| Library                                            | Description                                                  | Websize              |
+| -------------------------------------------------- | ------------------------------------------------------------ | -------------------- |
+| [Ruma](https://github.com/ruma/ruma)               | Ruma is a Matrix homeserver, client, and supporting libraries written in Rust. | https://www.ruma.io/ |
+| [Sonant-rs](https://github.com/parasyte/sonant-rs) | A Rust port of the [Sonant 4K synth](http://www.pouet.net/prod.php?which=53615) with streaming support |                      |
 
 
 

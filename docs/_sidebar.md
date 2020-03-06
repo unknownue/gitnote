@@ -14,7 +14,7 @@
     - [Archlinux Installation](/system/arch-installation.md)
     - [Archlinux Setup](/system/arch-setup.md)
     - [Manjaro Setup](/system/manjaro-setup.md)
-    - [macOS](/system/macOS.md)
+    - [macOS](/system/macos.md)
 
 - Python
     - [Python](/python/python.md)
