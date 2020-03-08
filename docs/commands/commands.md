@@ -10,6 +10,14 @@ $ echo "**FILE CONTENT**" > target.txt
 $ echo "**ADDITIONAL CONTENT**" >> target.txt
 # Output to stderr
 $ >&2 echo "Here is stderr"
+# Output multi-lines to file
+$ (
+cat <<EOF
+
+contents
+
+EOF
+) > path/to/file
 ```
 
 ## View disk usage
@@ -58,6 +66,14 @@ $ kill -9 PROCESS_ID
 $ wget https://resource.url -O target_path
 # Download with username and password
 $ wget https://resource.url -O target_path --http-user=user --http-passwd=passwd
+# Split file
+$ curl --range 0-199999999 -o ubuntu-iso.part2 http://mirror.pnl.gov/releases/15.04/ubuntu-15.04-desktop-amd64.iso
+$ curl --range 200000000-399999999 -o ubuntu-iso.part2 http://mirror.pnl.gov/releases/15.04/ubuntu-15.04-desktop-amd64.iso
+$ curl --range 400000000-599999999 -o ubuntu-iso.part3 http://mirror.pnl.gov/releases/15.04/ubuntu-15.04-desktop-amd64.iso
+$ curl --range 600000000-799999999 -o ubuntu-iso.part4 http://mirror.pnl.gov/releases/15.04/ubuntu-15.04-desktop-amd64.iso
+$ curl --range 800000000-999999999 -o ubuntu-iso.part5 http://mirror.pnl.gov/releases/15.04/ubuntu-15.04-desktop-amd64.iso
+$ curl --range 1000000000- -o ubuntu-iso.part6 http://mirror.pnl.gov/releases/15.04/ubuntu-15.04-desktop-amd64.iso
+$ cat ubuntu-iso.part? > ubuntu-15.04-desktop-amd64.iso
 ```
 
 ## Chmod
@@ -89,6 +105,14 @@ $ mount /some/where/to/mount /mnt
 
 # unmount
 $ mount /mnt
+```
+
+## Display a file
+```bash
+# Output the content of file
+$ cat filename
+# Output first 100 lines(from 5 to 10 lines)
+$ sed -nn '5,10p' filename
 ```
 
 ## Sed
