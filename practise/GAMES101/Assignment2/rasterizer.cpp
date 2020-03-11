@@ -137,8 +137,8 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
         Eigen::Vector2f(0.75f, 0.75f),
     };
     // iterate through the pixel and find if the current pixel is inside the triangle
-    for (int x = (int)bbox_min.x(); x < (int)bbox_max.x(); x++) {
-        for (int y = (int)bbox_min.y(); y < (int)bbox_max.y(); y++) {
+    for (int x = (int)bbox_min.x(); x <= (int)bbox_max.x(); x++) {
+        for (int y = (int)bbox_min.y(); y <= (int)bbox_max.y(); y++) {
 
             // the count of subpixel occupied by current triangle in (x, y) pixel
             size_t hit_sample = 0;
