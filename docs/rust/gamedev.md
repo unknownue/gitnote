@@ -111,6 +111,7 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [texture-synthesis](https://github.com/EmbarkStudios/texture-synthesis) | A light Rust API for *Multiresolution Stochastic Texture Synthesis*. |
 | [Fontdue](https://github.com/mooman219/fontdue)              | A simple no_std font parser and rasterizer.                  |
+| [blurhash-rs](https://github.com/Raincal/blurhash-rs)        | Encode an image into a short ASCII string.                   |
 
 
 
@@ -152,6 +153,7 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 | [anyhow](https://github.com/dtolnay/anyhow)                  | This library provides `anyhow::Error`, a trait object based error type for easy idiomatic error handling in Rust applications. |
 | [staticvec](https://github.com/slightlyoutofphase/staticvec) | The staticvec implements a fixed-capacity stack-allocated Vec alternative backed by an array, using const generics. |
 | [heapless](https://github.com/japaric/heapless)              | This library implements static friendly data structures that don't require dynamic memory allocation. |
+| [confy](https://github.com/rust-cli/confy)                   | Zero-boilerplate configuration management.|
 
 
 
