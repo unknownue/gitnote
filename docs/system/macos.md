@@ -24,7 +24,3 @@ $ export HOMEBREW_NO_AUTO_UPDATE=true
 $ write -g NSServicesMinimumItemCountForContextSubmenu -int 999
 ```
 
-## Temporarily disable homebrew update
-```bash
-$ export HOMEBREW_NO_AUTO_UPDATE=true
-```

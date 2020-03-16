@@ -32,7 +32,7 @@ socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
 一切就绪，现在我们运行程序：
 
 ```bash
-docker run -e DISPLAY=host.docker.internal:0 -it --rm --name s3t  getting2vinod/studio3t:latest /opt/studio3t/Studio-3T
+docker run -e DISPLAY=host.docker.internal:0 -it --rm --name s3t getting2vinod/studio3t:latest /opt/studio3t/Studio-3T
 ```
 
 这里我们运行的是 Studio 3T 这款程序，如果更换成其他程序，请记得留下 -e DISPLAY=host.docker.internal:0。其中，host.docker.internal 是 docker 容器内访问宿主使用的 IP，对于 Docker for Mac 和 Docker for Windows 均有效。

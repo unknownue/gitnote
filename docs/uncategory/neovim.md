@@ -1,16 +1,16 @@
 # Neovim Note
 
-Save a file with admin
+## Save a file with admin
 ```vimscript
 :w !sudo tee %<CR>
 ```
 
-Print to html
+## Print to html
 ```vimscript
 :%TOhtml<CR>
 ```
 
-Inscrease number
+## Inscrease number
 ```vimscript
 <C-a>
 ```
@@ -24,6 +24,7 @@ Inscrease number
 :vsp filename 
 ```
 
+## Windows
 ```vimscript
 # Split window for the same file
 :sp
@@ -31,6 +32,14 @@ Inscrease number
 :close
 # Preserve current window, close other window
 :only
+```
+
+## Inspect variable
+```vimscript
+# Display set options
+:echo mouse?
+# Display global variable
+:echo g:some_variable
 ```
 
 ```vimscript
