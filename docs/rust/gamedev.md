@@ -112,6 +112,7 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 | [texture-synthesis](https://github.com/EmbarkStudios/texture-synthesis) | A light Rust API for *Multiresolution Stochastic Texture Synthesis*. |
 | [Fontdue](https://github.com/mooman219/fontdue)              | A simple no_std font parser and rasterizer.                  |
 | [blurhash-rs](https://github.com/Raincal/blurhash-rs)        | Encode an image into a short ASCII string.                   |
+| [ttf-parser](https://github.com/RazrFalcon/ttf-parser)       | A high-level, safe, zero-allocation TrueType font parser.    | 
 
 
 
