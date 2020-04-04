@@ -31,6 +31,12 @@ id_rsa.pub                                    100%  223     0.2KB/s   00:00
 [chenlb@B ~]$ chmod 600 .ssh/authorized_keys
 ```
 
+或者在A机子上
+
+```bash
+$ ssh-copy-id B-user@192.168.1.10
+```
+
 `authorized_keys`的权限要是600。
 
 4.A机登录B机。

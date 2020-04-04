@@ -15,6 +15,7 @@ $ git checkout tags/<tag_name>
 $ git checkout tags/<tag_name> -b <branch_name>
 ```
 
+
 Modify history commit message
 ```bash
 $ git rebase -i HEAD~5
@@ -22,3 +23,12 @@ $ git rebase -i HEAD~5
 $ git commit --amend
 $ git rebase --continue
 ```
+
+
+### Submodule
+```bash
+# Pull all submodule
+$ git submodule update --remote --recursive 
+```
+
+

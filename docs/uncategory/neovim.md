@@ -40,6 +40,10 @@
 :echo mouse?
 # Display global variable
 :echo g:some_variable
+# Access shell variable
+if system('echo $SOME_VARIABLE') =~ "variable"
+    # do something
+endif
 ```
 
 ```vimscript

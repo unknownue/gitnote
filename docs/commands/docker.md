@@ -80,3 +80,15 @@ $ docker run --rm -it -p 6006:6006 -v (pwd):/root/dev/ docker_image_name
 # In container
 $ tensorboard --logdir log/path/ --host 0.0.0.0 --port 6006
 ```
+
+Registry
+/etc/docker/daemon.json
+```json
+{
+    "registry-mirrors": [
+        "https://6kx4zyno.mirror.aliyuncs.com",
+        "http://141e5461.m.daocloud.io",
+        "https://docker.mirrors.ustc.edu.cn"
+    ]
+}
+```
