@@ -1,4 +1,8 @@
 - Home
+
+- Paper
+    - [paper](paper/paper.md)
+
 - Commands
     - [common](/commands/commands.md)
     - [docker](/commands/docker.md)
@@ -15,6 +19,10 @@
     - [Archlinux Setup](/system/arch-setup.md)
     - [Manjaro Setup](/system/manjaro-setup.md)
     - [macOS](/system/macos.md)
+    - [Swap](/system/swap.md)
+    - [Docker-Gui-macOS](/system/run-docker-gui-on-macOS.md)
+    - [Clean-ubuntu](system/clean-ubuntu.md)
+    - [Fish](system/fish.md)
 
 - Python
     - [Python](/python/python.md)

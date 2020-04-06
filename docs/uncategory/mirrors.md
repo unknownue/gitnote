@@ -6,14 +6,29 @@ $ cat /etc/issue
 ```
 
 Conda
+See also https://mirror.tuna.tsinghua.edu.cn/help/anaconda/
+`.condarc`
+```
+channels:
+  - defaults
+show_channel_urls: true
+channel_alias: https://mirrors.tuna.tsinghua.edu.cn/anaconda
+default_channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/pro
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+```
 ```shell
-$ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
-$ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
-$ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/conda-forge/
-$ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/msys2/
-$ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/bioconda/
-$ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/menpo/
-$ conda config --set show_channel_urls yes
+conda clean -i
 ```
 
 Ubuntu 16.04
