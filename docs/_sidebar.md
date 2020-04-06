@@ -1,7 +1,6 @@
-- Home
+- [Home](/)
 
-- Paper
-    - [paper](paper/paper.md)
+- [Paper](/paper/paper.md)
 
 - Commands
     - [common](/commands/commands.md)
