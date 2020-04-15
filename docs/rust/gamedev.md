@@ -11,7 +11,7 @@
 - [GUI](#GUI)
 - [ECS](#ECS)
 - [Engine](#Engine)
-- [Texture/Font](#Texture/Font)
+- [Asset](#Asset)
 - [Design](#Design)
 - [Network](#Network)
 - [Performance](#Performance)
@@ -83,6 +83,7 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 | [Legion](https://github.com/TomGillen/legion)                | High performance Rust ECS library.                           |                            |
 | [Specs](https://github.com/amethyst/specs)                   | Specs is an Entity-Component System written in Rust.         | https://specs.amethyst.rs/ |
 | [component_group](https://github.com/sunjay/component_group) | A Rust crate for working with a group of Components (in the Specs ECS) |                            |
+| [ecs_bench](https://github.com/lschmierer/ecs_bench)         | Benchmarks of various Entity Component Systems in Rust        | |
 
 
 
@@ -105,10 +106,11 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 
 
 
-## Texture/Font
+## Asset
 
 | Library                                                      | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [Assets-manager](https://github.com/a1phyr/assets_manager)   | Conveniently load, store and cache external resources        |
 | [texture-synthesis](https://github.com/EmbarkStudios/texture-synthesis) | A light Rust API for *Multiresolution Stochastic Texture Synthesis*. |
 | [Fontdue](https://github.com/mooman219/fontdue)              | A simple no_std font parser and rasterizer.                  |
 | [blurhash-rs](https://github.com/Raincal/blurhash-rs)        | Encode an image into a short ASCII string.                   |
@@ -122,6 +124,7 @@ Note: See [mathbench-rs](https://github.com/bitshifter/mathbench-rs) for benchma
 | ------------------------------------------- | ------------------------------------------------------------ |
 | [VeoLuz](https://github.com/jaredly/veoluz) | Visualize the paths of millions of light rays through reflection, refraction and diffusion. |
 | [lyon](https://github.com/nical/lyon)       | 2D graphics rendering on the GPU in rust using path tessellation. |
+| [valora](https://github.com/turnage/valora)] | A brush for generative fine art.                             |
 
 
 
