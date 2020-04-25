@@ -41,19 +41,29 @@ From https://github.com/Aris-t2/CustomCSSforFx
 
 @-moz-document url(chrome://browser/content/browser.xhtml) {
 	/* tabs on bottom of window */
-	/*
-  we want to move #navigator-toolbox, but since FF72, it is wrapped in
-  a `box` element that has no identifier. we would like to use:
-  box:has(#navigator-toolbox) { -moz-box-ordinal-group: 10; }
-  but :has isn't a "live selector", so we can't use it in stylesheet
-  context. instead, we use this hack:
-	*/
+	/* requires that you set
+    * toolkit.legacyUserProfileCustomizations.stylesheets = true
+    * in about:config
+    */
 	#mainPopupSet ~ box { -moz-box-ordinal-group: 10; }
-	#urlbar { -moz-box-ordinal-group: 11; }
-	.urlbarView {
+	#titlebar { -moz-box-ordinal-group: 11; }
+	#urlbar {
 		top: unset !important;
-		bottom: 61px !important;
+		bottom: calc((var(--urlbar-toolbar-height) - var(--urlbar-height)) / 2) !important;
 		box-shadow: none !important;
+		display: flex !important;
+		flex-direction: column !important;
+	}
+	#urlbar-input-container {
+		order: 2;
+	}
+	#urlbar > .urlbarView {
+		order: 1;
+		border-bottom: 1px solid #666;
+	}
+	#urlbar-results {
+		display: flex;
+		flex-direction: column-reverse;
 	}
 	.search-one-offs { display: none !important; }
 	.tab-background { border-top: none !important; }
@@ -63,15 +73,6 @@ From https://github.com/Aris-t2/CustomCSSforFx
 	.tabbrowser-tab { font-size: 80%; }
 	.tab-content { padding: 0 5px; }
 	.tab-close-button .toolbarbutton-icon { width: 12px !important; height: 12px !important; }
-}
-```
-
-`appbutton_hidden.css`
-```CSS
-
-/* Hide min, max, close in title bar */
-#TabsToolbar > .titlebar-buttonbox-container {
-	display: none!important;
 }
 ```
 
