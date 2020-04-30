@@ -1,6 +1,7 @@
 # Arch Linux Setup
 
 ## Color
+
 ```bash
 # Add color to pacman
 $ nvim /etc/pacman.conf
@@ -11,6 +12,7 @@ $ alias ls="ls --color"
 ```
 
 ## Install basic package
+
 ```bash
 # Upgrade system
 $ pacman -Syu
@@ -28,6 +30,7 @@ $ pacman -Sy
 ```
 
 ## User
+
 ```bash
 $ useradd -m -G wheel unknownue
 $ passwd unknownue
@@ -37,17 +40,20 @@ $ visudo
 ```
 
 ## TRIM
+
 ```bash
 # Enable TRIM support on SSD
 $ systemctl enable fstrim.timer
 ```
 
 ## Shutdown system
+
 ```bash
 $ shutdown -h now
 ```
 
 ## Connect to network(by eth0)
+
 ```bash
 # find some way to install dhcpcd
 $ pacman -S dhcpcd 
@@ -64,7 +70,9 @@ ping google.com
 ```
 
 # GUI
+
 https://wiki.archlinux.org/index.php/KDE
+
 ```bash
 $ pacman -S xorg xorg-server
 
@@ -84,31 +92,39 @@ $ systemctl start sddm
 ```
 
 ### Disable baloo(For file searching)
+
 See also https://wiki.archlinux.org/index.php/Baloo
+
 ```bash
 $ balooctl suspend
 $ balooctl disable
 ```
 
 ### Global Menu
+
 1. Desktop right click > Add panel > Application Menu Bar
 2. Install widget
-```bash
-$ pacman -S plasma5-applets-active-window-control
-```
-3.Add this widget to left side of global menu
-4.open its setting, and choose `Hide titlebar for maximized windows`
-
+   
+   ```bash
+   $ pacman -S plasma5-applets-active-window-control
+   ```
+   
+   3.Add this widget to left side of global menu
+   4.open its setting, and choose `Hide titlebar for maximized windows`
 
 ## Graphics
+
 See also http://tieba.baidu.com/p/6340530678?red_tag=p3174950699
+
 ### INTEL Driver
+
 ```bash
 # Install dirver for intel
 $ pacman -S xf86-video-intel
 ```
 
 ### NVIDIA Driver
+
 ```bash
 # Install dirver for nvidia
 $ pacman -S nvidia
@@ -141,17 +157,20 @@ $ nvidia-smi -q
 ```
 
 /etc/mkinitcpio.conf
+
 ```
 MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)
 ```
 
 /etc/default/grub
+
 ```
 GRUB_CMDLINE_LINUX_DEFAULT="quiet"
 GRUB_CMDLINE_LINUX="nvidia-drm.modeset=1"
 ```
 
 /usr/share/sddm/scripts/Xsetup
+
 ```bash
 #!/bin/sh
 # Xsetup - run as root before the login dialog appear
@@ -160,6 +179,7 @@ xrandr --auto
 ```
 
 /etc/X11/xorg.conf(The BusID is needed to calculate)
+
 ```
 Section "Module"
     Load "modesetting"
@@ -173,8 +193,8 @@ Section "Device"
 EndSection
 ```
 
-
 ### Graphics switcher
+
 ```bash
 # See which GPU is working now
 $ lspci | grep VGA
@@ -199,6 +219,7 @@ $ systemctl enable bumblebeed
 ```
 
 /etc/bumblebee/bumblebee.conf
+
 ```
 Driver=nvidia
 [driver-nvidia]
@@ -206,13 +227,16 @@ PMMethod=bbswitch
 ```
 
 ### cuDNN
+
 See https://developer.nvidia.com/cuda-gpus
+
 ```bash
 $ pacman -S cuda cudnn
 $ reboot
 ```
 
 ## Other Drivers
+
 ```bash
 # Audio
 $ pacman -S alsa-utils pulseaudio pulseaudio-alsa
@@ -247,7 +271,9 @@ $ tlp-stat
 ```
 
 ## SSH
+
 ### OpenSSH
+
 ```bash
 $ pacman -S openssh
 # Start on system launch
@@ -267,6 +293,7 @@ $ nvim /etc/ssh/sshd_config
 ```
 
 ### Mac Remote Develement
+
 ```bash
 (archlinux) $ nvim /etc/ssh/sshd_config
 (nvim) $ # as follows
@@ -277,17 +304,20 @@ $ nvim /etc/ssh/sshd_config
 ```
 
 (archlinux) /etc/ssh/sshd_config
+
 ```
 X11Forwarding yes
 X11DisplayOffset 10
 ```
 
 (mac) /private/etc/ssh/ssh_config
+
 ```
 ForwardX11 yes
 ```
 
 ## Shadowsocks
+
 ```bash
 $ pacman -S shadowsocks-libev
 $ mkdir /etc/shadowsocks
@@ -315,21 +345,23 @@ $ ss-local -c /etc/shadowsocks/config.json
 ```
 
 /etc/shadowsocks/config.json
+
 ```json
 {
-	"server":"remote-shadowsocks-server-ip-addr",
-	"server_port":443,
-	"local_address":"127.0.0.1",
-	"local_port":1080,
-	"password":"your-passwd",
-	"timeout":300,
-	"method":"chacha20-ietf",
-	"fast_open":false,
-	"workers":1
+    "server":"remote-shadowsocks-server-ip-addr",
+    "server_port":443,
+    "local_address":"127.0.0.1",
+    "local_port":1080,
+    "password":"your-passwd",
+    "timeout":300,
+    "method":"chacha20-ietf",
+    "fast_open":false,
+    "workers":1
 }
 ```
 
 ## BBR
+
 ```bash
 # the kernel version must be >= 4.9
 $ uname -r
@@ -346,6 +378,7 @@ $ lsmod | grep bbr
 ```
 
 ## Docker
+
 ```bash
 $ pacman -S --noconfirm docker docker-compose
 $ systemctl enable docker
@@ -356,12 +389,11 @@ $ sudo gpasswd -a $USER docker
 $ newgrp docker
 ```
 
-
-
 ## Trojan
+
 See also https://wiki.archlinux.org/index.php/Trojan
+
 ```bash
 $ pacman -S --noconfirm trojan
 # Config as https://github.com/Acris/docker-shadowsocks-libev
 ```
-

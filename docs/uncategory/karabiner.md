@@ -1,6 +1,7 @@
 # Karabiner Customized
 
 In `~/.config/karabiner/assets/complex_modifications/karabiner-programming.json`
+
 ```json
 {
     "title": "Use grave accent key to simulate down and up arrow in specific programming applications",
@@ -175,5 +176,4 @@ In `~/.config/karabiner/assets/complex_modifications/karabiner-programming.json`
         }
     ]
 }
-
 ```

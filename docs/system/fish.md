@@ -1,7 +1,7 @@
-
 # Fish shell
 
 # Check variable
+
 From https://stackoverflow.com/questions/47743015/fish-shell-how-to-check-if-a-variable-is-set-empty
 
 - set -q var (note the missing "$" - this uses the variable name) can be used to check if a variable has been set.
@@ -19,4 +19,3 @@ When something like set var has been done (without any additional arguments), se
 When something like set var "" has been done, both set versions will be true.
 
 When something like set var "somestring" (or even set var "" "" [fn1]) has been done, the sets will be true and test -z "$var" will be false.
-

@@ -8,7 +8,7 @@ Paper: https://papers.nips.cc/paper/7362-pointcnn-convolution-on-x-transformed-p
 
 Github: https://github.com/yangyanli/PointCNN
 
-​		点云数据不同于传统的2D图片，点的位置没有规则，并且点之间没有顺序。这使得Convolution操作不太好直接处理点云。这篇文章通过一种自定义的 $\mathcal{X}$-Conv 操作，使常规的Convolution也能处理点云。本文对其进行大概的介绍。论文、代码地址如下：
+​        点云数据不同于传统的2D图片，点的位置没有规则，并且点之间没有顺序。这使得Convolution操作不太好直接处理点云。这篇文章通过一种自定义的 $\mathcal{X}$-Conv 操作，使常规的Convolution也能处理点云。本文对其进行大概的介绍。论文、代码地址如下：
 
 ## 1. 主要问题
 
@@ -17,8 +17,6 @@ Github: https://github.com/yangyanli/PointCNN
 ![Point-CNN-1](images/PointCNN-1.jpg)
 
 图(i)表示2D图片的情况，此时，四个点的位置顺序是固定的。对于点云，其位置顺序有很多可能，如图(ii, iii, iv)所示。如果对图(ii, iii, iv)执行Convolution操作：
-
-
 
 ![Point-CNN-2](images/PointCNN-2.svg)
 
@@ -59,6 +57,7 @@ Github: https://github.com/yangyanli/PointCNN
 $$
 \mathbf{F}_{p}=\mathcal{X}-\operatorname{Conv}(\mathbf{K}, p, \mathbf{P}, \mathbf{F})=\operatorname{Conv}\left(\mathbf{K}, \mathrm{MLP}(\mathbf{P}-p) \times\left[M L P_{\delta}(\mathbf{P}-p), \mathbf{F}\right]\right)
 $$
+
 可以看出，对于不同的顺序，计算出来的 $\mathcal{X}$ 是不同的。
 
 论文中给出了一个feature可视化的结果：
@@ -70,4 +69,3 @@ $\mathbf{F}_{*}$与邻居点的排列顺序有关，不同的排列顺序，得�
 ## **3. 总结**
 
 这篇论文的核心在于 $\mathcal{X}$ 矩阵。论文希望通过该矩阵来将邻居点的feature矩阵变得与邻居点的顺序无关。
-

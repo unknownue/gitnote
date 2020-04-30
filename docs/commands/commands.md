@@ -1,6 +1,7 @@
 # Shell Commands
 
 ## Echo
+
 ```bash
 # output something to std
 $ echo "Hello world"
@@ -21,6 +22,7 @@ EOF
 ```
 
 ## View disk usage
+
 ```bash
 # Show file size of current directory
 $ ls -hl
@@ -31,22 +33,26 @@ $ du -hl --max-depth=1
 ```
 
 ## Search
+
 ```bash
 # Search current directory
 $ grep -rn "hello,world!" ./
 ```
 
 ## Query the number of threads of processor
+
 ```bash
 $ nproc
 ```
 
 ## Query CPU info
+
 ```bash
 $ cat /proc/cpuinfo
 ```
 
 ## Query process status
+
 ```bash
 # View all proess realtime status
 $ top
@@ -62,6 +68,7 @@ $ kill -9 PROCESS_ID
 ```
 
 ## Download
+
 ```bash
 $ wget https://resource.url -O target_path
 # Download with username and password
@@ -77,11 +84,12 @@ $ cat ubuntu-iso.part? > ubuntu-15.04-desktop-amd64.iso
 ```
 
 ## Chmod
+
 ```bash
 $ chmod 777 file
 ```
 
-## 7Z
+## 7z
 
 ```bash
 # 7z a archive.7z path_to_dir/path_to_file
@@ -94,11 +102,13 @@ $ 7z x archive.7z
 ```
 
 Search local network device
+
 ```bash
 $ nmap -sP 192.168.1.0/24
 ```
 
 ## Mount
+
 ```bash
 # mount source target
 $ mount /some/where/to/mount /mnt
@@ -108,6 +118,7 @@ $ mount /mnt
 ```
 
 ## Display a file
+
 ```bash
 # Output the content of file
 $ cat filename
@@ -116,22 +127,27 @@ $ sed -nn '5,10p' filename
 ```
 
 ## Sed
+
 insert the content of file1 to file2 at line 10
+
 ```bash
 $ sed -i '10r path/to/file1' path/to/file2
 ```
 
 insert the content of file1 to the end of file2
+
 ```bash
 $ cat path/to/file1 >> path/to/file2
 ```
 
 Replace characters from ORIGIN_STRING to NEW_STRING for FILE
+
 ```bash
 $ sed -i 's/ORIGIN_STRING/NEW_STRING/' FILE
 ```
 
 ## Path
+
 ```bash
 # Convert a path to an absolute path without symlinks
 $ realpath some/path
@@ -144,6 +160,7 @@ $ basename some/path
 ```
 
 ## Get IP address
+
 ```bash
 # IPV4
 $ ip -4 address show | grep inet | grep -v 127.0.0 | awk '{print $2}' | cut -d'/' -f1
@@ -151,3 +168,9 @@ $ ip -4 address show | grep inet | grep -v 127.0.0 | awk '{print $2}' | cut -d'/
 $ ip -6 address show | grep inet6 | awk '{print $2}' | cut -d'/' -f1
 ```
 
+# aria2
+
+```bash
+# Example: aria2c --ftp-user=username --ftp-passwd=password sftp://remote_ip:port/path/to/target/file
+aria2c --ftp-user=root --ftp-passwd=1111 sftp://111.111.11.11:34432/home/user/files/hello.txt
+```

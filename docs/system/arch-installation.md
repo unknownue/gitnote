@@ -1,6 +1,7 @@
 # Arch Linux Installation
 
 # Prepare
+
 ```bash
 # Downdown install iso from https://archlinux.org/download/.
 # Boot this iso from the computer to install.
@@ -9,6 +10,7 @@ $ pacman-key -v archlinux-version-x86_64.iso.sig
 ```
 
 # Installation setup
+
 ```bash
 # Set keyboard layout
 $ loadkeys colemak
@@ -32,6 +34,7 @@ $ timedatectl set-ntp true
 ```
 
 ## Allocate storage
+
 ```bash
 # check if motherboard support UEFI
 $ ls /sys/firmware/efi/efivars
@@ -80,6 +83,7 @@ $ swapon /dev/sda2
 ```
 
 ## Install system
+
 ```bash
 # Modify software source
 $ vim /etc/pacman.d/mirrorlist
@@ -94,6 +98,7 @@ $ genfstab -U /mnt >> /mnt/etc/fstab
 ```
 
 ## Configure system
+
 ```bash
 # Jump to installed system
 (u-disk) $ arch-chroot /mnt
@@ -139,6 +144,7 @@ $ genfstab -U /mnt >> /mnt/etc/fstab
 ```
 
 /mnt/etc/hosts
+
 ```hosts
 127.0.0.1      localhost
 ::1            localhost
